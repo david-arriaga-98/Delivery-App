@@ -16,7 +16,8 @@ export default () => {
 				dispatch({
 					type: HelperConstants.CLOSE_MODAL
 				})
-			}>
+			}
+		>
 			<Modal.Header closeButton>
 				<Modal.Title>
 					<i className="fas fa-clipboard-check mr-2"></i>
@@ -26,12 +27,10 @@ export default () => {
 			<Modal.Body>
 				<Row className="justify-content-center">
 					<Col className="text-center" sm="12" md="12">
-						<Image
-							width="230px"
-							src={SuccessImage}></Image>
+						<Image width="230px" src={SuccessImage}></Image>
 					</Col>
 					<Col md="12" className="text-center mt-3 ">
-						<h4>Usuario creado</h4>
+						<h4>{state.responseModal.message}</h4>
 					</Col>
 					<Col md="12" className="text-right mt-3">
 						<Button
@@ -40,7 +39,8 @@ export default () => {
 								dispatch({
 									type: HelperConstants.CLOSE_MODAL
 								});
-							}}>
+							}}
+						>
 							<i className="fas fa-check mr-2"></i>
 							Salir
 						</Button>

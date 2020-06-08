@@ -7,6 +7,7 @@ import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
 import HomeComponent from './components/Home';
 import SessionComponent from './components/Session';
+import ShippingComponent from './components/Shipping';
 
 import ResponseModalComponent from './components/Responses/Response';
 
@@ -17,11 +18,7 @@ const Main = () => {
 		<React.Fragment>
 			<Row className="justify-content-center">
 				<Col md="12" className="text-center">
-					<Image
-						width="100%"
-						height="100%"
-						src={ImageMain}
-					/>
+					<Image width="100%" height="100%" src={ImageMain} />
 				</Col>
 			</Row>
 		</React.Fragment>
@@ -37,16 +34,17 @@ function App({ history, context }) {
 				<Switch>
 					<Route exact path={'/'} component={Main} />
 
+					<SessionComponent exact path={'/home'} component={HomeComponent} />
+
 					<SessionComponent
 						exact
-						path={'/home'}
-						component={HomeComponent}
+						path={'/envios'}
+						component={ShippingComponent}
 					/>
+
 					<Route exact path={'*'}>
 						<Row className="justify-content-center">
-							<Col
-								md="12"
-								className="text-danger text-center mt-5">
+							<Col md="12" className="text-danger text-center mt-5">
 								<h1>Esta página no existe</h1>
 							</Col>
 						</Row>

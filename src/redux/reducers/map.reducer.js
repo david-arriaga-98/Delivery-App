@@ -57,6 +57,11 @@ export default (state = initialState, action) => {
 			return Object.assign({}, state, {
 				chargingConfirm: !state.chargingConfirm
 			});
+
+		case MapConstants.RESTART_MAP_STATE:
+			return Object.assign({}, state, {
+				...initialState
+			});
 		default:
 			return state;
 	}
