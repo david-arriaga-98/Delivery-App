@@ -39,3 +39,9 @@ export const CHARGING_CONFIRM = () => {
 		type: MapConstants.CHARGING_CONFIRM
 	};
 };
+
+export const RESTART_MAP_STATE = () => {
+	return {
+		type: MapConstants.RESTART_MAP_STATE
+	};
+};

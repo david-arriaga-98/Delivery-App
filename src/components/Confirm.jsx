@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import Axios from '../utils/Axios';
 
 import MapConstants from '../constants/Map';
+import HelperConstants from '../constants/Helper';
 
 const MainComponent = (props) => {
 	// Hooks
@@ -60,10 +61,7 @@ const MainComponent = (props) => {
 						direcciondes: destiny.direcction
 					};
 
-					const response = await Axios.post(
-						'/Orden/Insertar',
-						dataToSend
-					);
+					const response = await Axios.post('/Orden/Insertar', dataToSend);
 					setTravelData({
 						...travelData,
 						horaestimada: response.data[0].horaestimada,
@@ -115,7 +113,8 @@ const ErrorResponse = (props) => {
 					dispatch({
 						type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL
 					});
-				}}>
+				}}
+			>
 				Volver
 			</Button>
 		</Fragment>
@@ -129,7 +128,6 @@ const DataComponent = (props) => {
 		travelData,
 		origin,
 		destiny,
-		data,
 		dispatch,
 		chargingConfirm
 	} = props;
@@ -184,25 +182,21 @@ const DataComponent = (props) => {
 		}
 		try {
 			const dataToSend = {
-				idusuario: data.idusuario,
-				latitudorg: origin.position.lat,
-				longitudorg: origin.position.lng,
-				codigopostalorg: '00000',
-				direccionorg: origin.direcction,
-				latituddes: destiny.position.lat,
-				longituddes: destiny.position.lng,
-				codigopostaldes: '00000',
-				direcciondes: destiny.direcction,
+				idorden: travelData.s_idorden,
 				fechaprogramada: check ? formData.date : '1900-01-01',
 				horaprogramada: check ? formData.hour : '00:00:00',
-				esprogramado: check ? 'true' : 'false',
-				s_idorden: travelData.s_idorden
+				esprogramado: check ? 'true' : 'false'
 			};
-			const response = await Axios.post(
-				'/Orden/Insertar',
-				dataToSend
-			);
-			console.log(response);
+			await Axios.post('/Pedido/Insertar', dataToSend);
+
+			dispatch({ type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL });
+			dispatch({
+				type: HelperConstants.SHOW_SUCCESS_MODAL,
+				payload: 'Pedido realizado correctamente'
+			});
+			dispatch({
+				type: MapConstants.RESTART_MAP_STATE
+			});
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}
@@ -215,39 +209,27 @@ const DataComponent = (props) => {
 				<FormGroup>
 					<Row>
 						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>
-								Origen:
-							</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>Origen:</FormLabel>
 						</Col>
 						<Col md="10">
-							<FormControl
-								readOnly
-								value={origin.direcction}
-							/>
+							<FormControl readOnly value={origin.direcction} />
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>
-								Destino:
-							</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>Destino:</FormLabel>
 						</Col>
 						<Col md="10">
-							<FormControl
-								readOnly
-								value={destiny.direcction}
-							/>
+							<FormControl readOnly value={destiny.direcction} />
 						</Col>
 					</Row>
 				</FormGroup>
 				<Row className="justify-content-center">
 					<Col md="11" className="px-0">
 						<div style={style}>
-							<Map
-								google={google}
-								style={mapProps.mapStyle}></Map>
+							<Map google={google} style={mapProps.mapStyle}></Map>
 						</div>
 					</Col>
 				</Row>
@@ -256,42 +238,30 @@ const DataComponent = (props) => {
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Tiempo de espera:
-							</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>Tiempo de espera:</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">
-								{travelData.tiempoespera}
-							</p>
+							<p className="text-success">{travelData.tiempoespera}</p>
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Hora estimada:
-							</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>Hora estimada:</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">
-								{travelData.horaestimada}
-							</p>
+							<p className="text-success">{travelData.horaestimada}</p>
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Distancia:
-							</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>Distancia:</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">
-								{travelData.distancia}
-							</p>
+							<p className="text-success">{travelData.distancia}</p>
 						</Col>
 					</Row>
 				</FormGroup>
@@ -324,15 +294,11 @@ const DataComponent = (props) => {
 									ref={register({
 										pattern: {
 											value: /^\d{4}([-])(0?[1-9]|1[1-2])\1(3[01]|[12][0-9]|0?[1-9])$/,
-											message:
-												'Error, formato de fecha es aaaa-mm-dd'
+											message: 'Error, formato de fecha es aaaa-mm-dd'
 										},
 										required: {
-											value: check
-												? true
-												: false,
-											message:
-												'Este campo es requerido'
+											value: check ? true : false,
+											message: 'Este campo es requerido'
 										}
 									})}
 									isInvalid={!!errors.date}
@@ -358,15 +324,11 @@ const DataComponent = (props) => {
 									ref={register({
 										pattern: {
 											value: /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/,
-											message:
-												'Error, formato de hora es hh:mm:ss'
+											message: 'Error, formato de hora es hh:mm:ss'
 										},
 										required: {
-											value: check
-												? true
-												: false,
-											message:
-												'Este campo es requerido'
+											value: check ? true : false,
+											message: 'Este campo es requerido'
 										}
 									})}
 									isInvalid={!!errors.hour}
@@ -377,10 +339,7 @@ const DataComponent = (props) => {
 							</Col>
 							<Col md="12" className="mt-3 text-center">
 								{chargingConfirm ? (
-									<Button
-										variant="success"
-										type="submit"
-										disabled>
+									<Button variant="success" type="submit" disabled>
 										Confirmando
 										<Spinner
 											className="ml-2"
@@ -392,16 +351,12 @@ const DataComponent = (props) => {
 										/>
 									</Button>
 								) : (
-									<Button
-										variant="success"
-										type="submit">
+									<Button variant="success" type="submit">
 										Confirmar
 									</Button>
 								)}
 
-								<span className="mt-3 text-secondary">
-									{resError}
-								</span>
+								<span className="mt-3 text-secondary">{resError}</span>
 							</Col>
 						</Row>
 					</FormGroup>
