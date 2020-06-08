@@ -4,7 +4,7 @@ const initialState = {
 	responseModal: {
 		showModal: false,
 		modalType: 'SUCCESS',
-		message: 'Proceso realizado satisfactoriamente'
+		message: ''
 	}
 };
 
