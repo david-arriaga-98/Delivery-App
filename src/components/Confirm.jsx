@@ -18,12 +18,8 @@ import { useForm } from 'react-hook-form';
 import Axios from '../utils/Axios';
 
 import MapConstants from '../constants/Map';
-<<<<<<< HEAD
 /* import { push } from 'connected-react-router'; */
 import HelperConstants from '../constants/Helper';
-=======
-import { push } from 'connected-react-router';
->>>>>>> 9ee00eccc37d5276a7d6de49dd1eeb1d8300269b
 
 const MainComponent = (props) => {
 	// Hooks
@@ -192,15 +188,11 @@ const DataComponent = (props) => {
 			dispatch({
 				type: MapConstants.RESTART_MAP_STATE
 			});
-<<<<<<< HEAD
 			dispatch({
 				type: HelperConstants.SHOW_SUCCESS_MODAL,
 				payload: 'Pedido realizado correctamente'
 			});
 			/* dispatch(push('/envios')) */
-=======
-			dispatch(push('/envios'));
->>>>>>> 9ee00eccc37d5276a7d6de49dd1eeb1d8300269b
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}

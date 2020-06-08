@@ -7,11 +7,7 @@ import HeaderComponent from './components/Header';
 import FooterComponent from './components/Footer';
 import HomeComponent from './components/Home';
 import SessionComponent from './components/Session';
-<<<<<<< HEAD
 /* import ShippingComponent from './components/Shipping'; */
-=======
-import ShippingComponent from './components/Shipping';
->>>>>>> 9ee00eccc37d5276a7d6de49dd1eeb1d8300269b
 
 import ResponseModalComponent from './components/Responses/Response';
 
@@ -40,19 +36,11 @@ function App({ history, context }) {
 
 					<SessionComponent exact path={'/home'} component={HomeComponent} />
 
-<<<<<<< HEAD
 					{/* 	<SessionComponent
 						exact
 						path={'/envios'}
 						component={ShippingComponent}
 					/> */}
-=======
-					<SessionComponent
-						exact
-						path={'/envios'}
-						component={ShippingComponent}
-					/>
->>>>>>> 9ee00eccc37d5276a7d6de49dd1eeb1d8300269b
 
 					<Route exact path={'*'}>
 						<Row className="justify-content-center">
