@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import Axios from '../utils/Axios';
 
 import MapConstants from '../constants/Map';
-import HelperConstants from '../constants/Helper';
+import { push } from 'connected-react-router';
 
 const MainComponent = (props) => {
 	// Hooks
@@ -123,19 +123,14 @@ const ErrorResponse = (props) => {
 
 const DataComponent = (props) => {
 	// Props
-	const {
-		google,
-		travelData,
-		origin,
-		destiny,
-		dispatch,
-		chargingConfirm
-	} = props;
+	const { google, travelData, origin, destiny, dispatch } = props;
 
 	// Hooks
 	const [check, setCheck] = useState(false);
 
 	const [resError, setResError] = useState('');
+
+	const [spinner, setSpinner] = useState(false);
 
 	const {
 		register,
@@ -171,7 +166,7 @@ const DataComponent = (props) => {
 	};
 
 	const onSubmit = async (formData) => {
-		dispatch({ type: MapConstants.CHARGING_CONFIRM });
+		setSpinner(false);
 		if (formData.date !== '') {
 			const year = formData.date.split('-');
 			if (check && (year[0] > 2022 || year[0] < 2020)) {
@@ -188,19 +183,15 @@ const DataComponent = (props) => {
 				esprogramado: check ? 'true' : 'false'
 			};
 			await Axios.post('/Pedido/Insertar', dataToSend);
-
 			dispatch({ type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL });
-			dispatch({
-				type: HelperConstants.SHOW_SUCCESS_MODAL,
-				payload: 'Pedido realizado correctamente'
-			});
 			dispatch({
 				type: MapConstants.RESTART_MAP_STATE
 			});
+			dispatch(push('/envios'));
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}
-		dispatch({ type: MapConstants.CHARGING_CONFIRM });
+		setSpinner(false);
 	};
 
 	return (
@@ -338,7 +329,7 @@ const DataComponent = (props) => {
 								</Form.Control.Feedback>
 							</Col>
 							<Col md="12" className="mt-3 text-center">
-								{chargingConfirm ? (
+								{spinner ? (
 									<Button variant="success" type="submit" disabled>
 										Confirmando
 										<Spinner

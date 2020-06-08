@@ -131,7 +131,14 @@ const IsLoggedIn = () => {
 				<span className="navbar__item">Perfil</span>
 			</Navbar.Text> */}
 			<Navbar.Text className="mr-3">
-				<span className="navbar__item">Mis envíos</span>
+				<span
+					className="navbar__item"
+					onClick={() => {
+						dispatch(push('/envios'));
+					}}
+				>
+					Mis envíos
+				</span>
 			</Navbar.Text>
 			<Navbar.Text className="mr-1">
 				<span
