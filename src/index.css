@@ -1,0 +1,53 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	color: #454b5c;
+	overflow-x: hidden;
+}
+
+.color_orange {
+	background-color: #ff6600;
+}
+
+.navbar__item {
+	color: rgb(252, 240, 240);
+}
+
+.navbar__item:hover {
+	cursor: pointer;
+	color: rgb(211, 201, 201);
+}
+
+.footer {
+	height: 50px;
+	line-height: 50px;
+	background: #1e120d;
+	color: rgb(252, 240, 240);
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+.error-message {
+	font-size: 13px;
+	color: #ff7851;
+}
+
+.btn,
+.form-control {
+	border-radius: 0;
+}
+
+.btn-success {
+	border-radius: 3.125rem;
+}
+
+.put-hand {
+	cursor: pointer;
+}
+
+.form-label {
+	color: #414242;
+}
