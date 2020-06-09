@@ -155,7 +155,7 @@ const DataComponent = (props) => {
 	// Functions
 
 	const handleData = async () => {
-		setSpinner(false);
+		setSpinner(true);
 		try {
 			const dataToSend = {
 				idorden: travelData.s_idorden,
@@ -327,6 +327,7 @@ const DataComponent = (props) => {
 					<Row>
 						<Col md="6" className="mt-3 text-center">
 							<Button
+								block
 								variant="danger"
 								onClick={() => {
 									dispatch({
@@ -340,6 +341,7 @@ const DataComponent = (props) => {
 						<Col md="6" className="mt-3 text-center">
 							{spinner ? (
 								<Button
+									block
 									variant="success"
 									type="submit"
 									disabled>
@@ -355,12 +357,14 @@ const DataComponent = (props) => {
 								</Button>
 							) : (
 								<Button
+									block
 									variant="success"
 									onClick={handleData}>
 									Confirmar
 								</Button>
 							)}
-
+						</Col>
+						<Col md="12">
 							<span className="mt-3 text-secondary">
 								{resError}
 							</span>

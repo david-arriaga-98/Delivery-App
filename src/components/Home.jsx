@@ -119,6 +119,7 @@ export default () => {
 			<Modal
 				size="lg"
 				show={store.confirmModalState}
+				backdrop="static"
 				onHide={() =>
 					dispatch({
 						type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL

@@ -40,7 +40,8 @@ body {
 	border-radius: 0;
 }
 
-.btn-success {
+.btn-success,
+.btn-danger {
 	border-radius: 3.125rem;
 }
 
