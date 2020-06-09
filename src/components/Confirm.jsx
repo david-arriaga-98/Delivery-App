@@ -11,15 +11,14 @@ import {
 } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { GoogleApiWrapper, Map } from 'google-maps-react';
-
-import { Api } from '../constants/Common';
 import { LoadingContainer } from './Maps/Map';
-import { useForm } from 'react-hook-form';
 import Axios from '../utils/Axios';
-
 import MapConstants from '../constants/Map';
 /* import { push } from 'connected-react-router'; */
 import HelperConstants from '../constants/Helper';
+import { format } from 'date-fns';
+import { Api } from '../constants/Common';
+import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
 
 const MainComponent = (props) => {
 	// Hooks
@@ -62,7 +61,10 @@ const MainComponent = (props) => {
 						direcciondes: destiny.direcction
 					};
 
-					const response = await Axios.post('/Orden/Insertar', dataToSend);
+					const response = await Axios.post(
+						'/Orden/Insertar',
+						dataToSend
+					);
 					setTravelData({
 						...travelData,
 						horaestimada: response.data[0].horaestimada,
@@ -114,8 +116,7 @@ const ErrorResponse = (props) => {
 					dispatch({
 						type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL
 					});
-				}}
-			>
+				}}>
 				Volver
 			</Button>
 		</Fragment>
@@ -133,14 +134,8 @@ const DataComponent = (props) => {
 
 	const [spinner, setSpinner] = useState(false);
 
-	const {
-		register,
-		errors,
-		handleSubmit,
-		reset,
-		setError,
-		clearError
-	} = useForm();
+	const [date, setDate] = useState(new Date());
+	const [hour, setHour] = useState(new Date());
 
 	// Maps property
 	const mapProps = {
@@ -158,31 +153,21 @@ const DataComponent = (props) => {
 	};
 
 	// Functions
-	const onChange = () => {
-		setCheck(!check);
-		reset({
-			date: '',
-			hour: ''
-		});
-	};
 
-	const onSubmit = async (formData) => {
+	const handleData = async () => {
 		setSpinner(false);
-		if (formData.date !== '') {
-			const year = formData.date.split('-');
-			if (check && (year[0] > 2022 || year[0] < 2020)) {
-				clearError('date');
-				setError('date', 'error', 'Año no valido');
-				return;
-			}
-		}
 		try {
 			const dataToSend = {
 				idorden: travelData.s_idorden,
-				fechaprogramada: check ? formData.date : '1900-01-01',
-				horaprogramada: check ? formData.hour : '00:00:00',
+				fechaprogramada: check
+					? format(date, 'yyyy-MM-dd')
+					: '1900-01-01',
+				horaprogramada: check
+					? format(hour, 'hh:mm:ss')
+					: '00:00:00',
 				esprogramado: check ? 'true' : 'false'
 			};
+
 			await Axios.post('/Pedido/Insertar', dataToSend);
 			dispatch({ type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL });
 			dispatch({
@@ -192,7 +177,7 @@ const DataComponent = (props) => {
 				type: HelperConstants.SHOW_SUCCESS_MODAL,
 				payload: 'Pedido realizado correctamente'
 			});
-			/* dispatch(push('/envios')) */
+			/* dispatch(push('/envios')); */
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}
@@ -205,27 +190,39 @@ const DataComponent = (props) => {
 				<FormGroup>
 					<Row>
 						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>Origen:</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>
+								Origen:
+							</FormLabel>
 						</Col>
 						<Col md="10">
-							<FormControl readOnly value={origin.direcction} />
+							<FormControl
+								readOnly
+								value={origin.direcction}
+							/>
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>Destino:</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>
+								Destino:
+							</FormLabel>
 						</Col>
 						<Col md="10">
-							<FormControl readOnly value={destiny.direcction} />
+							<FormControl
+								readOnly
+								value={destiny.direcction}
+							/>
 						</Col>
 					</Row>
 				</FormGroup>
 				<Row className="justify-content-center">
 					<Col md="11" className="px-0">
 						<div style={style}>
-							<Map google={google} style={mapProps.mapStyle}></Map>
+							<Map
+								google={google}
+								style={mapProps.mapStyle}></Map>
 						</div>
 					</Col>
 				</Row>
@@ -234,30 +231,42 @@ const DataComponent = (props) => {
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>Tiempo de espera:</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>
+								Tiempo de espera:
+							</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">{travelData.tiempoespera}</p>
+							<p className="text-success">
+								{travelData.tiempoespera}
+							</p>
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>Hora estimada:</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>
+								Hora estimada:
+							</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">{travelData.horaestimada}</p>
+							<p className="text-success">
+								{travelData.horaestimada}
+							</p>
 						</Col>
 					</Row>
 				</FormGroup>
 				<FormGroup>
 					<Row>
 						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>Distancia:</FormLabel>
+							<FormLabel style={{ color: 'gray' }}>
+								Distancia:
+							</FormLabel>
 						</Col>
 						<Col md="5">
-							<p className="text-success">{travelData.distancia}</p>
+							<p className="text-success">
+								{travelData.distancia}
+							</p>
 						</Col>
 					</Row>
 				</FormGroup>
@@ -266,7 +275,9 @@ const DataComponent = (props) => {
 						<Col md="12">
 							<Form.Check
 								style={{ color: 'gray' }}
-								onChange={onChange}
+								onChange={() => {
+									setCheck(!check);
+								}}
 								type="checkbox"
 								label="Programar hora de entrega?"
 							/>
@@ -274,89 +285,88 @@ const DataComponent = (props) => {
 					</Row>
 				</FormGroup>
 
-				<Form onSubmit={handleSubmit(onSubmit)}>
-					<FormGroup>
-						<Row>
-							<Col md="12">
-								<FormLabel style={{ color: 'gray' }}>
-									Fecha programada:
-								</FormLabel>
-							</Col>
-							<Col md="12">
-								<FormControl
-									disabled={!check}
-									type="text"
-									name="date"
-									ref={register({
-										pattern: {
-											value: /^\d{4}([-])(0?[1-9]|1[1-2])\1(3[01]|[12][0-9]|0?[1-9])$/,
-											message: 'Error, formato de fecha es aaaa-mm-dd'
-										},
-										required: {
-											value: check ? true : false,
-											message: 'Este campo es requerido'
-										}
-									})}
-									isInvalid={!!errors.date}
-								/>
-								<Form.Control.Feedback type="invalid">
-									{errors?.date?.message}
-								</Form.Control.Feedback>
-							</Col>
-						</Row>
-					</FormGroup>
-					<FormGroup>
-						<Row>
-							<Col md="12">
-								<FormLabel style={{ color: 'gray' }}>
-									Hora programada:
-								</FormLabel>
-							</Col>
-							<Col md="12">
-								<FormControl
-									disabled={!check}
-									type="text"
-									name="hour"
-									ref={register({
-										pattern: {
-											value: /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/,
-											message: 'Error, formato de hora es hh:mm:ss'
-										},
-										required: {
-											value: check ? true : false,
-											message: 'Este campo es requerido'
-										}
-									})}
-									isInvalid={!!errors.hour}
-								/>
-								<Form.Control.Feedback type="invalid">
-									{errors?.hour?.message}
-								</Form.Control.Feedback>
-							</Col>
-							<Col md="12" className="mt-3 text-center">
-								{spinner ? (
-									<Button variant="success" type="submit" disabled>
-										Confirmando
-										<Spinner
-											className="ml-2"
-											as="span"
-											animation="border"
-											size="sm"
-											role="status"
-											aria-hidden="true"
-										/>
-									</Button>
-								) : (
-									<Button variant="success" type="submit">
-										Confirmar
-									</Button>
-								)}
+				<FormGroup>
+					<Row>
+						<Col md="12">
+							<FormLabel style={{ color: 'gray' }}>
+								Fecha programada:
+							</FormLabel>
+						</Col>
+						<Col md="12">
+							<KeyboardDatePicker
+								disabled={!check}
+								value={date}
+								format={'dd-MM-yyyy'}
+								minDate={new Date()}
+								onChange={(date) => {
+									setDate(date);
+								}}
+							/>
+						</Col>
+					</Row>
+				</FormGroup>
 
-								<span className="mt-3 text-secondary">{resError}</span>
-							</Col>
-						</Row>
-					</FormGroup>
-				</Form>
+				<FormGroup>
+					<Row>
+						<Col md="12">
+							<FormLabel style={{ color: 'gray' }}>
+								Hora programada:
+							</FormLabel>
+						</Col>
+						<Col md="12">
+							<TimePicker
+								disabled={!check}
+								ampm={false}
+								value={hour}
+								onChange={setHour}
+							/>
+						</Col>
+					</Row>
+				</FormGroup>
+				<FormGroup>
+					<Row>
+						<Col md="6" className="mt-3 text-center">
+							<Button
+								variant="danger"
+								onClick={() => {
+									dispatch({
+										type:
+											MapConstants.OPEN_CLOSE_CONFIRM_MODAL
+									});
+								}}>
+								Salir
+							</Button>
+						</Col>
+						<Col md="6" className="mt-3 text-center">
+							{spinner ? (
+								<Button
+									variant="success"
+									type="submit"
+									disabled>
+									Confirmando
+									<Spinner
+										className="ml-2"
+										as="span"
+										animation="border"
+										size="sm"
+										role="status"
+										aria-hidden="true"
+									/>
+								</Button>
+							) : (
+								<Button
+									variant="success"
+									onClick={handleData}>
+									Confirmar
+								</Button>
+							)}
+
+							<span className="mt-3 text-secondary">
+								{resError}
+							</span>
+						</Col>
+					</Row>
+				</FormGroup>
 			</Col>
 		</Row>
 	);

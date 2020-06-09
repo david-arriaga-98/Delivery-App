@@ -24,8 +24,7 @@ export default () => {
 				className="put-hand"
 				onClick={() => {
 					dispatch(push('/'));
-				}}
-			>
+				}}>
 				EvoSys
 			</Navbar.Brand>
 
@@ -46,11 +45,11 @@ const NotIsLoggedIn = () => {
 					<span
 						onClick={() =>
 							dispatch({
-								type: SessionConstants.OPEN_CLOSE_LOGIN_MODAL
+								type:
+									SessionConstants.OPEN_CLOSE_LOGIN_MODAL
 							})
 						}
-						className="navbar__item"
-					>
+						className="navbar__item">
 						Iniciar
 					</span>
 				</Navbar.Text>
@@ -58,11 +57,11 @@ const NotIsLoggedIn = () => {
 					<span
 						onClick={() =>
 							dispatch({
-								type: SessionConstants.OPEN_CLOSE_REGISTER_MODAL
+								type:
+									SessionConstants.OPEN_CLOSE_REGISTER_MODAL
 							})
 						}
-						className="navbar__item"
-					>
+						className="navbar__item">
 						Registrarse
 					</span>
 				</Navbar.Text>
@@ -77,8 +76,7 @@ const NotIsLoggedIn = () => {
 					dispatch({
 						type: SessionConstants.OPEN_CLOSE_LOGIN_MODAL
 					})
-				}
-			>
+				}>
 				<Modal.Header closeButton>
 					<Modal.Title>
 						<i className="fas fa-clipboard-check mr-2"></i>
@@ -95,10 +93,10 @@ const NotIsLoggedIn = () => {
 				show={store.registerModalState}
 				onHide={() =>
 					dispatch({
-						type: SessionConstants.OPEN_CLOSE_REGISTER_MODAL
+						type:
+							SessionConstants.OPEN_CLOSE_REGISTER_MODAL
 					})
-				}
-			>
+				}>
 				<Modal.Header closeButton>
 					<Modal.Title>
 						<i className="fas fa-address-book mr-2"></i>
@@ -122,8 +120,7 @@ const IsLoggedIn = () => {
 					className="navbar__item"
 					onClick={() => {
 						dispatch(push('/home'));
-					}}
-				>
+					}}>
 					Home
 				</span>
 			</Navbar.Text>
@@ -135,8 +132,7 @@ const IsLoggedIn = () => {
 					className="navbar__item"
 					onClick={() => {
 						dispatch(push('/envios'));
-					}}
-				>
+					}}>
 					Mis envíos
 				</span>
 			</Navbar.Text>
@@ -150,8 +146,7 @@ const IsLoggedIn = () => {
 							type: MapConstants.RESTART_MAP_STATE
 						});
 					}}
-					className="navbar__item"
-				>
+					className="navbar__item">
 					Salir
 				</span>
 			</Navbar.Text>
