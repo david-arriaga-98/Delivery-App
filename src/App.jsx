@@ -70,7 +70,7 @@ function App({ history, context }) {
 						</Route>
 					</Switch>
 				</Container>
-				<FooterComponent />
+				{/* <FooterComponent /> */}
 			</MuiPickersUtilsProvider>
 		</ConnectedRouter>
 	);

@@ -14,8 +14,8 @@ import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { LoadingContainer } from './Maps/Map';
 import Axios from '../utils/Axios';
 import MapConstants from '../constants/Map';
-/* import { push } from 'connected-react-router'; */
-import HelperConstants from '../constants/Helper';
+import { push } from 'connected-react-router';
+/* import HelperConstants from '../constants/Helper'; */
 import { format } from 'date-fns';
 import { Api } from '../constants/Common';
 import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
@@ -173,11 +173,11 @@ const DataComponent = (props) => {
 			dispatch({
 				type: MapConstants.RESTART_MAP_STATE
 			});
-			dispatch({
+			/* dispatch({
 				type: HelperConstants.SHOW_SUCCESS_MODAL,
 				payload: 'Pedido realizado correctamente'
-			});
-			/* dispatch(push('/envios')); */
+			}); */
+			dispatch(push('/envios'));
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}
@@ -327,6 +327,7 @@ const DataComponent = (props) => {
 					<Row>
 						<Col md="6" className="mt-3 text-center">
 							<Button
+								size="sm"
 								block
 								variant="danger"
 								onClick={() => {
@@ -341,6 +342,7 @@ const DataComponent = (props) => {
 						<Col md="6" className="mt-3 text-center">
 							{spinner ? (
 								<Button
+									size="sm"
 									block
 									variant="success"
 									type="submit"
@@ -357,6 +359,7 @@ const DataComponent = (props) => {
 								</Button>
 							) : (
 								<Button
+									size="sm"
 									block
 									variant="success"
 									onClick={handleData}>
