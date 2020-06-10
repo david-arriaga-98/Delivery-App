@@ -5,7 +5,9 @@ import {
 	Image,
 	Button,
 	FormControl,
-	Spinner
+	Spinner,
+	FormGroup,
+	FormLabel
 } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
@@ -15,17 +17,22 @@ import HelperConstants from '../constants/Helper';
 
 import InputGroup from 'react-bootstrap/InputGroup';
 
+import { format } from 'date-fns';
+
+import Validator from 'validator';
+
+import { KeyboardDatePicker } from '@material-ui/pickers';
+
 export default () => {
 	const [orders, setOrders] = useState([]);
 	const [gotData, setGotData] = useState(false);
 	const [respError, setRespError] = useState('');
-
 	const helperStore = useSelector((state) => state.helper);
 	const sessionStore = useSelector((state) => state.session);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (orders.length === 0 && !gotData) {
+		if (orders.length === 0 && !gotData && respError === '') {
 			getOrder();
 		}
 	});
@@ -34,15 +41,7 @@ export default () => {
 		try {
 			const dataToSend = {
 				interfaz: 'U',
-				idpedido: undefined,
-				idorden: undefined,
-				fechadestino_del: undefined,
-				fechadestino_al: undefined,
 				idusuario: sessionStore.data.idusuario,
-				idestado: undefined,
-				fecharecibido_del: undefined,
-				fecharecibido_al: undefined,
-				idusuariorepartidor: undefined,
 				limitederegistros: 0
 			};
 			const { data } = await axios.post(
@@ -68,6 +67,7 @@ export default () => {
 						orders={orders}
 						dispatch={dispatch}
 						helperStore={helperStore}
+						sessionStore={sessionStore}
 					/>
 				) : (
 					<HuboUnErrorAlObtenerLosDatos />
@@ -105,10 +105,129 @@ const EstaCargandoLosDatos = () => {
 	);
 };
 
-const ObtuvoLosDatos = ({ dispatch, orders, helperStore }) => {
+const NoHayDatos = () => {
+	return (
+		<Col md="9" className="mt-4 text-center">
+			<h5 className="text-dark">No hay datos para mostrar</h5>
+		</Col>
+	);
+};
+
+const ObtuvoLosDatos = ({
+	dispatch,
+	orders,
+	helperStore,
+	sessionStore
+}) => {
+	const newOrders = orders.reverse();
+
+	const [orderId, setOrderID] = useState('');
+
+	const [
+		dataFromThisComponent,
+		setDataFromThisComponent
+	] = useState([]);
+
+	const [error, setError] = useState('');
+
+	const [charging, setCharging] = useState(false);
+
+	const [isCharged, setIsCharget] = useState(false);
+
+	const [
+		useDataFromThisComponent,
+		setUseDataFromThisComponent
+	] = useState(false);
+
+	// Dates
+	const [destFrom, setDestFrom] = useState(null);
+	const [destTo, setDestTo] = useState(null);
+
+	const [orgFrom, setOrgFrom] = useState(null);
+	const [orgTo, setOrgTo] = useState(null);
+
+	const onChange = (e) => {
+		setOrderID(e.target.value);
+	};
+
+	const onClickFromModal = async () => {
+		setError('');
+		setCharging(true);
+		setUseDataFromThisComponent(true);
+		dispatch({
+			type: HelperConstants.APPLY_FILTERS_MODAL
+		});
+		try {
+			const dataToSend = {
+				interfaz: 'U',
+				fechadestino_del:
+					destFrom === null
+						? undefined
+						: format(destFrom, 'dd-MM-yyyy'),
+				fechadestino_al:
+					destTo === null
+						? undefined
+						: format(destTo, 'dd-MM-yyyy'),
+				idusuario: sessionStore.data.idusuario,
+				fecharecibido_del:
+					orgFrom === null
+						? undefined
+						: format(orgFrom, 'dd-MM-yyyy'),
+				fecharecibido_al:
+					orgTo === null
+						? undefined
+						: format(orgTo, 'dd-MM-yyyy'),
+				limitederegistros: 0
+			};
+			const { data } = await axios.post(
+				'/Entregas/Listar',
+				dataToSend
+			);
+			setDataFromThisComponent(data);
+		} catch (error) {
+			setError('Ha ocurrido un error al consultar al servidor');
+		}
+		setIsCharget(true);
+		setCharging(false);
+	};
+
+	const onClick = async () => {
+		setError('');
+		setCharging(true);
+		// Validamos que por lo menos haya escrito algo
+		if (!Validator.isEmpty(orderId)) {
+			// Hacemos la peticion al servidor
+			setUseDataFromThisComponent(true);
+
+			try {
+				const dataToSend = {
+					interfaz: 'U',
+					idorden: orderId,
+					idusuario: sessionStore.data.idusuario,
+					limitederegistros: 0
+				};
+
+				const { data } = await axios.post(
+					'/Entregas/Listar',
+					dataToSend
+				);
+				setDataFromThisComponent(data);
+			} catch (e) {
+				setError(
+					'Ha ocurrido un error al consultar al servidor'
+				);
+			}
+		} else {
+			setError('Este campo no puede estar vacío');
+		}
+		setIsCharget(true);
+		setCharging(false);
+	};
+
 	return (
 		<Fragment>
 			<Modal
+				size="xl"
 				onHide={() =>
 					dispatch({
 						type: HelperConstants.APPLY_FILTERS_MODAL
@@ -121,7 +240,62 @@ const ObtuvoLosDatos = ({ dispatch, orders, helperStore }) => {
 						Filtrar la búsqueda
 					</Modal.Title>
 				</Modal.Header>
-				<Modal.Body></Modal.Body>
+				<Modal.Body>
+					<Row>
+						<Col md="6">
+							<FormGroup>
+								<FormLabel>
+									Fecha de destino
+								</FormLabel>
+								<Row>
+									<Col md="5">
+										<KeyboardDatePicker
+											clearable
+											value={destFrom}
+											format={'dd-MM-yyyy'}
+											helperText="desde"
+											onChange={setDestFrom}
+										/>
+									</Col>
+									<Col md="5">
+										<KeyboardDatePicker
+											clearable
+											value={destTo}
+											format={'dd-MM-yyyy'}
+											helperText="hasta"
+											onChange={setDestTo}
+										/>
+									</Col>
+								</Row>
+							</FormGroup>
+						</Col>
+						<Col md="6">
+							<FormGroup>
+								<FormLabel>Fecha de origen</FormLabel>
+								<Row>
+									<Col md="5">
+										<KeyboardDatePicker
+											clearable
+											value={orgFrom}
+											format={'dd-MM-yyyy'}
+											helperText="desde"
+											onChange={setOrgFrom}
+										/>
+									</Col>
+									<Col md="5">
+										<KeyboardDatePicker
+											clearable
+											value={orgTo}
+											format={'dd-MM-yyyy'}
+											helperText="hasta"
+											onChange={setOrgTo}
+										/>
+									</Col>
+								</Row>
+							</FormGroup>
+						</Col>
+					</Row>
+				</Modal.Body>
 				<Modal.Footer>
 					<Button
 						variant="danger"
@@ -135,13 +309,15 @@ const ObtuvoLosDatos = ({ dispatch, orders, helperStore }) => {
 						<i className="fas fa-times mr-2"></i>
 						Cancelar
 					</Button>
-					<Button variant="info" size="sm">
+					<Button
+						variant="info"
+						size="sm"
+						onClick={onClickFromModal}>
 						<i className="fas fa-search mr-2"></i>
 						Buscar
 					</Button>
 				</Modal.Footer>
 			</Modal>
-
 			<Col md="9" className="mb-4">
 				<Row className="justify-content-between">
 					<Col>
@@ -161,33 +337,108 @@ const ObtuvoLosDatos = ({ dispatch, orders, helperStore }) => {
 							<FormControl
 								type="text"
 								placeholder="Ingrese el ID de su orden"
+								onChange={onChange}
 							/>
 							<InputGroup.Append>
 								<InputGroup.Text
-									onClick={() => {
-										console.log('ok');
-									}}
+									onClick={onClick}
 									className="bg-primary put-hand">
 									<i className="fas fa-search text-white"></i>
 								</InputGroup.Text>
 							</InputGroup.Append>
 						</InputGroup>
+						<span className="error-message">{error}</span>
 					</Col>
 				</Row>
 			</Col>
+			{useDataFromThisComponent ? (
+				charging ? (
+					<EstaCargandoLosDatos />
+				) : !charging &&
+				  isCharged &&
+				  dataFromThisComponent.length === 0 ? (
+					<NoHayDatos />
+				) : (
+					dataFromThisComponent
+						.reverse()
+						.map((item, index) => {
+							let hour = newOrders[
+								index
+							].horaestimada.split(':');
+							let hour2 = newOrders[
+								index
+							].horadestino.split(':');
 
-			{orders.map((item, index) => {
-				return (
-					<ShippingCard
-						key={index}
-						date={'01/06/2020'}
-						hour={'02:00'}
-						distance="25"
-						from="Lugar 1"
-						to="Lugar 2"
-					/>
-				);
-			})}
+							return (
+								<ShippingCard
+									key={index}
+									date={
+										item.esprogramado
+											? format(
+													new Date(
+														item.fechaprogramada
+													),
+													'dd-MM-yyyy'
+											  )
+											: format(
+													new Date(
+														item.fechadestino
+													),
+													'dd-MM-yyyy'
+											  )
+									}
+									hour={
+										item.esprogramado
+											? `${hour[0]}:${hour[1]}`
+											: `${hour2[0]}:${hour2[1]}`
+									}
+									distance={item.distancia}
+									from={item.direccionorg}
+									to={item.direcciondes}
+								/>
+							);
+						})
+				)
+			) : newOrders.length === 0 ? (
+				<NoHayDatos />
+			) : (
+				newOrders.map((item, index) => {
+					let hour = newOrders[index].horaestimada.split(
+						':'
+					);
+					let hour2 = newOrders[index].horadestino.split(
+						':'
+					);
+					return (
+						<ShippingCard
+							key={index}
+							date={
+								item.esprogramado
+									? format(
+											new Date(
+												item.fechaprogramada
+											),
+											'dd-MM-yyyy'
+									  )
+									: format(
+											new Date(
+												item.fechadestino
+											),
+											'dd-MM-yyyy'
+									  )
+							}
+							hour={
+								item.esprogramado
+									? `${hour[0]}:${hour[1]}`
+									: `${hour2[0]}:${hour2[1]}`
+							}
+							distance={item.distancia}
+							from={item.direccionorg}
+							to={item.direcciondes}
+						/>
+					);
+				})
+			)}
 		</Fragment>
 	);
 };
@@ -210,7 +461,7 @@ const ShippingCard = ({ date, hour, distance, from, to }) => {
 							</Col>
 							<Col md="9">
 								<Row>
-									<Col md="3">01/06/2020</Col>
+									<Col md="3">{date}</Col>
 									<Col md="5">
 										Hora de Entrega:{'  '}
 										<span className="text-black-50">
