@@ -19,3 +19,9 @@ export const CLOSE_MODAL = () => {
 		type: HelperConstants.CLOSE_MODAL
 	};
 };
+
+export const APPLY_FILTERS_MODAL = () => {
+	return {
+		type: HelperConstants.APPLY_FILTERS_MODAL
+	};
+};

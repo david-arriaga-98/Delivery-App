@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-/* import { logger } from 'redux-logger'; */
+import { logger } from 'redux-logger';
 import reduxSaga from 'redux-saga';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
@@ -18,7 +18,7 @@ export default (preloadedState) => {
 			compose(
 				applyMiddleware(
 					routerMiddleware(history),
-					/* logger */
+					logger,
 					sagaMiddleware
 				)
 			)

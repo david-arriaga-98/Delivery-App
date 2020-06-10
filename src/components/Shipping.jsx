@@ -1,12 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Row, Col, Image } from 'react-bootstrap';
+import React, { useEffect, useState, Fragment } from 'react';
+import {
+	Row,
+	Col,
+	Image,
+	Button,
+	FormControl,
+	Spinner
+} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import axios from '../utils/Axios';
+import { useSelector, useDispatch } from 'react-redux';
+import HelperConstants from '../constants/Helper';
+
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export default () => {
 	const [orders, setOrders] = useState([]);
 	const [gotData, setGotData] = useState(false);
 	const [respError, setRespError] = useState('');
+
+	const helperStore = useSelector((state) => state.helper);
+	const sessionStore = useSelector((state) => state.session);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (orders.length === 0 && !gotData) {
@@ -16,51 +32,170 @@ export default () => {
 
 	const getOrder = async () => {
 		try {
-			const { data } = await axios.get(
-				'https://jsonplaceholder.typicode.com/posts'
+			const dataToSend = {
+				interfaz: 'U',
+				idpedido: undefined,
+				idorden: undefined,
+				fechadestino_del: undefined,
+				fechadestino_al: undefined,
+				idusuario: sessionStore.data.idusuario,
+				idestado: undefined,
+				fecharecibido_del: undefined,
+				fecharecibido_al: undefined,
+				idusuariorepartidor: undefined,
+				limitederegistros: 0
+			};
+			const { data } = await axios.post(
+				'/Entregas/Listar',
+				dataToSend
 			);
 			setOrders(data);
-			setGotData(true);
 		} catch (error) {
 			setRespError(
 				'Ha ocurrido un error al tratar de recuperar su información'
 			);
 		}
+		setGotData(true);
 	};
 
 	return (
-		<React.Fragment>
-			{!gotData ? (
-				<h1>Aun no se obtiene respuesta</h1>
-			) : (
-				orders.map((item, index) => {
-					return (
-						<ShippingCard
-							key={index}
-							date={'01/06/2020'}
-							hour={'02:00'}
-							distance="25"
-							from="mi enepe"
-							to="your ass"
-						/>
-					);
-				})
-			)}
-			{/* <ShippingCard
-				date={'01/06/2020'}
-				hour={'02:00'}
-				distance="25"
-				from="mi enepe"
-				to="your ass"
-			/> */}
-		</React.Fragment>
+		<Fragment>
+			<Row className="justify-content-center ">
+				{!gotData ? (
+					<EstaCargandoLosDatos />
+				) : respError === '' ? (
+					<ObtuvoLosDatos
+						orders={orders}
+						dispatch={dispatch}
+						helperStore={helperStore}
+					/>
+				) : (
+					<HuboUnErrorAlObtenerLosDatos />
+				)}
+			</Row>
+		</Fragment>
+	);
+};
+
+const HuboUnErrorAlObtenerLosDatos = () => {
+	return (
+		<Col md="9" className="mt-4 text-center">
+			<h5 className="text-danger">
+				Ha ocurrido un error al obtener sus datos del servidor
+			</h5>
+		</Col>
+	);
+};
+
+const EstaCargandoLosDatos = () => {
+	return (
+		<Col md="9" className="mt-4 text-center">
+			<h5 className="text-success">
+				Espere... Estamos obteniendo sus datos del servidor
+			</h5>
+			<Spinner
+				className="ml-2"
+				as="span"
+				animation="border"
+				size="sm"
+				role="status"
+				aria-hidden="true"
+			/>
+		</Col>
+	);
+};
+
+const ObtuvoLosDatos = ({ dispatch, orders, helperStore }) => {
+	return (
+		<Fragment>
+			<Modal
+				onHide={() =>
+					dispatch({
+						type: HelperConstants.APPLY_FILTERS_MODAL
+					})
+				}
+				show={helperStore.searchSends.filterModal}>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						<i className="fas fa-filter mr-2"></i>
+						Filtrar la búsqueda
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body></Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="danger"
+						size="sm"
+						onClick={() => {
+							dispatch({
+								type:
+									HelperConstants.APPLY_FILTERS_MODAL
+							});
+						}}>
+						<i className="fas fa-times mr-2"></i>
+						Cancelar
+					</Button>
+					<Button variant="info" size="sm">
+						<i className="fas fa-search mr-2"></i>
+						Buscar
+					</Button>
+				</Modal.Footer>
+			</Modal>
+
+			<Col md="9" className="mb-4">
+				<Row className="justify-content-between">
+					<Col>
+						<Button
+							onClick={() => {
+								dispatch({
+									type:
+										HelperConstants.APPLY_FILTERS_MODAL
+								});
+							}}>
+							<i className="fas fa-plus mr-2"></i>
+							Aplicar filtros a tu búsqueda
+						</Button>
+					</Col>
+					<Col>
+						<InputGroup className="mb-2">
+							<FormControl
+								type="text"
+								placeholder="Ingrese el ID de su orden"
+							/>
+							<InputGroup.Append>
+								<InputGroup.Text
+									onClick={() => {
+										console.log('ok');
+									}}
+									className="bg-primary put-hand">
+									<i className="fas fa-search text-white"></i>
+								</InputGroup.Text>
+							</InputGroup.Append>
+						</InputGroup>
+					</Col>
+				</Row>
+			</Col>
+
+			{orders.map((item, index) => {
+				return (
+					<ShippingCard
+						key={index}
+						date={'01/06/2020'}
+						hour={'02:00'}
+						distance="25"
+						from="Lugar 1"
+						to="Lugar 2"
+					/>
+				);
+			})}
+		</Fragment>
 	);
 };
 
 const ShippingCard = ({ date, hour, distance, from, to }) => {
 	return (
-		<Row className="justify-content-center border-dark mb-2">
-			<Col md="9">
+		<Fragment>
+			<Col md="9" className="mb-3">
 				<Card style={{ border: '1px solid gray' }}>
 					<Card.Body>
 						<Row>
@@ -110,6 +245,6 @@ const ShippingCard = ({ date, hour, distance, from, to }) => {
 					</Card.Body>
 				</Card>
 			</Col>
-		</Row>
+		</Fragment>
 	);
 };

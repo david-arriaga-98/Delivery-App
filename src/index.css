@@ -1,6 +1,4 @@
 body {
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
 	color: #454b5c;
 	overflow-x: hidden;
 }
@@ -35,15 +33,16 @@ body {
 	color: #ff7851;
 }
 
-.btn,
+/* .btn,
 .form-control {
 	border-radius: 0;
 }
 
 .btn-success,
-.btn-danger {
+.btn-danger,
+.btn-info {
 	border-radius: 3.125rem;
-}
+} */
 
 .put-hand {
 	cursor: pointer;

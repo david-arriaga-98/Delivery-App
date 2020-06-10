@@ -5,6 +5,9 @@ const initialState = {
 		showModal: false,
 		modalType: 'SUCCESS',
 		message: ''
+	},
+	searchSends: {
+		filterModal: false
 	}
 };
 
@@ -35,7 +38,16 @@ export default (state = initialState, action) => {
 
 		case HelperConstants.CLOSE_MODAL:
 			return Object.assign({}, state, {
-				...initialState
+				responseModal: {
+					...initialState.responseModal
+				}
+			});
+
+		case HelperConstants.APPLY_FILTERS_MODAL:
+			return Object.assign({}, state, {
+				searchSends: {
+					filterModal: !state.searchSends.filterModal
+				}
 			});
 		default:
 			return state;
