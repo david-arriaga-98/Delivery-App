@@ -48,7 +48,8 @@ export default () => {
 				'/Entregas/Listar',
 				dataToSend
 			);
-			setOrders(data);
+
+			setOrders(data.reverse());
 		} catch (error) {
 			setRespError(
 				'Ha ocurrido un error al tratar de recuperar su información'
@@ -119,8 +120,6 @@ const ObtuvoLosDatos = ({
 	helperStore,
 	sessionStore
 }) => {
-	const newOrders = orders.reverse();
-
 	const [orderId, setOrderID] = useState('');
 
 	const [
@@ -183,7 +182,7 @@ const ObtuvoLosDatos = ({
 				'/Entregas/Listar',
 				dataToSend
 			);
-			setDataFromThisComponent(data);
+			setDataFromThisComponent(data.reverse());
 		} catch (error) {
 			setError('Ha ocurrido un error al consultar al servidor');
 		}
@@ -211,7 +210,7 @@ const ObtuvoLosDatos = ({
 					'/Entregas/Listar',
 					dataToSend
 				);
-				setDataFromThisComponent(data);
+				setDataFromThisComponent(data.reverse());
 			} catch (e) {
 				setError(
 					'Ha ocurrido un error al consultar al servidor'
@@ -359,58 +358,58 @@ const ObtuvoLosDatos = ({
 				  dataFromThisComponent.length === 0 ? (
 					<NoHayDatos />
 				) : (
-					dataFromThisComponent
-						.reverse()
-						.map((item, index) => {
-							let hour = newOrders[
-								index
-							].horaestimada.split(':');
-							let hour2 = newOrders[
-								index
-							].horadestino.split(':');
+					dataFromThisComponent.map((item, index) => {
+						let hour = dataFromThisComponent[
+							index
+						].horaprogramada.split(':');
+						let hour2 = dataFromThisComponent[
+							index
+						].horadestino.split(':');
 
-							return (
-								<ShippingCard
-									key={index}
-									date={
-										item.esprogramado
-											? format(
-													new Date(
-														item.fechaprogramada
-													),
-													'dd-MM-yyyy'
-											  )
-											: format(
-													new Date(
-														item.fechadestino
-													),
-													'dd-MM-yyyy'
-											  )
-									}
-									hour={
-										item.esprogramado
-											? `${hour[0]}:${hour[1]}`
-											: `${hour2[0]}:${hour2[1]}`
-									}
-									distance={item.distancia}
-									from={item.direccionorg}
-									to={item.direcciondes}
-								/>
-							);
-						})
+						return (
+							<ShippingCard
+								info={item}
+								dispatch={dispatch}
+								key={index}
+								date={
+									item.esprogramado
+										? format(
+												new Date(
+													item.fechaprogramada
+												),
+												'dd-MM-yyyy'
+										  )
+										: format(
+												new Date(
+													item.fechadestino
+												),
+												'dd-MM-yyyy'
+										  )
+								}
+								hour={
+									item.esprogramado
+										? `${hour[0]}:${hour[1]}`
+										: `${hour2[0]}:${hour2[1]}`
+								}
+								distance={item.distancia}
+								from={item.direccionorg}
+								to={item.direcciondes}
+							/>
+						);
+					})
 				)
-			) : newOrders.length === 0 ? (
+			) : orders.length === 0 ? (
 				<NoHayDatos />
 			) : (
-				newOrders.map((item, index) => {
-					let hour = newOrders[index].horaestimada.split(
+				orders.map((item, index) => {
+					let hour = orders[index].horaprogramada.split(
 						':'
 					);
-					let hour2 = newOrders[index].horadestino.split(
-						':'
-					);
+					let hour2 = orders[index].horadestino.split(':');
 					return (
 						<ShippingCard
+							info={item}
+							dispatch={dispatch}
 							key={index}
 							date={
 								item.esprogramado
@@ -439,14 +438,290 @@ const ObtuvoLosDatos = ({
 					);
 				})
 			)}
+
+			<Modal
+				scrollable
+				size="lg"
+				onHide={() =>
+					dispatch({
+						type: HelperConstants.ORDER_INFORMATION_MODAL,
+						payload: {
+							state: false
+						}
+					})
+				}
+				show={helperStore.orderInformationModal}>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						<i className="fas fa-info-circle mr-2"></i>
+						Información de la orden
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Row className="justify-content-center">
+						<Col md="3">
+							<FormGroup>
+								<FormLabel>
+									Tiempo de espera:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={`${helperStore.orderInfo.tiempoespera} minutos`}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md="3">
+							<FormGroup>
+								<FormLabel>Tarifa:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={`${helperStore.orderInfo.tarifa} $`}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="3">
+							<FormGroup>
+								<FormLabel>Distancia:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={`${helperStore.orderInfo.distancia} km`}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md="3">
+							<FormGroup>
+								<FormLabel>Programada:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.esprogramado
+											? 'SI'
+											: 'NO'
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>Hora estimada:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.horaestimada
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>Hora de Origen:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.horaorigen
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>
+									Hora de Destino:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.horadestino
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>Fecha estimada:</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInformationModal
+											? format(
+													new Date(
+														helperStore.orderInfo.fechaestimada
+													),
+													'dd-MM-yyyy'
+											  )
+											: ''
+									}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>
+									Fecha del origen del pedido:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInformationModal
+											? format(
+													new Date(
+														helperStore.orderInfo.fechaorigen
+													),
+													'dd-MM-yyyy'
+											  )
+											: ''
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="4">
+							<FormGroup>
+								<FormLabel>
+									Fecha del destino del pedido:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInformationModal
+											? format(
+													new Date(
+														helperStore.orderInfo.fechadestino
+													),
+													'dd-MM-yyyy'
+											  )
+											: ''
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="6">
+							<FormGroup>
+								<FormLabel>
+									Identificación de la orden:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo.idorden
+									}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md="6">
+							<FormGroup>
+								<FormLabel>
+									Identificación del pedido:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo.idpedido
+									}
+								/>
+							</FormGroup>
+						</Col>
+
+						<Col md="12">
+							<FormGroup>
+								<FormLabel>
+									Origen del pedido:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.direccionorg
+									}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md="12">
+							<FormGroup>
+								<FormLabel>
+									Origen del destino:
+								</FormLabel>
+								<FormControl
+									className="bg-primary text-white"
+									readOnly
+									value={
+										helperStore.orderInfo
+											.direcciondes
+									}
+								/>
+							</FormGroup>
+						</Col>
+					</Row>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="danger"
+						size="sm"
+						onClick={() => {
+							dispatch({
+								type:
+									HelperConstants.ORDER_INFORMATION_MODAL,
+								payload: {
+									state: false
+								}
+							});
+						}}>
+						<i className="fas fa-times mr-2"></i>
+						Cerrar
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</Fragment>
 	);
 };
 
-const ShippingCard = ({ date, hour, distance, from, to }) => {
+const ShippingCard = ({
+	date,
+	hour,
+	distance,
+	from,
+	to,
+	info,
+	helperStore,
+	dispatch
+}) => {
 	return (
 		<Fragment>
-			<Col md="9" className="mb-3">
+			<Col
+				md="9"
+				className="mb-3 put-hand"
+				onClick={() => {
+					dispatch({
+						type: HelperConstants.ORDER_INFORMATION_MODAL,
+						payload: {
+							info,
+							state: true
+						}
+					});
+				}}>
 				<Card style={{ border: '1px solid gray' }}>
 					<Card.Body>
 						<Row>

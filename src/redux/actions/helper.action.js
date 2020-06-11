@@ -25,3 +25,10 @@ export const APPLY_FILTERS_MODAL = () => {
 		type: HelperConstants.APPLY_FILTERS_MODAL
 	};
 };
+
+export const ORDER_INFORMATION_MODAL = (payload) => {
+	return {
+		type: HelperConstants.ORDER_INFORMATION_MODAL,
+		payload
+	};
+};

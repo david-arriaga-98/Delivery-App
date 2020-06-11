@@ -17,8 +17,16 @@ import Axios from '../utils/Axios';
 import HelperConstants from '../constants/Helper';
 import SessionConstants from '../constants/Session';
 
+console.log(Axios);
+
 export default () => {
-	const { register, errors, setError, clearError, handleSubmit } = useForm();
+	const {
+		register,
+		errors,
+		setError,
+		clearError,
+		handleSubmit
+	} = useForm();
 
 	const [charging, setCharging] = useState(false);
 	const dispatch = useDispatch();
@@ -50,12 +58,24 @@ export default () => {
 						error.response.data[0].mensaje ===
 						'El usuario ingresado ya existe en la base de datos'
 					) {
-						setError('usuario', 'validation', 'Este Usuario ya existe');
+						setError(
+							'usuario',
+							'validation',
+							'Este Usuario ya existe'
+						);
 					} else {
-						setError('form', 'validation', error.response.data[0].mensaje);
+						setError(
+							'form',
+							'validation',
+							error.response.data[0].mensaje
+						);
 					}
 				} else {
-					setError('form', 'validation', 'Ha ocurrido un error');
+					setError(
+						'form',
+						'validation',
+						'Ha ocurrido un error'
+					);
 				}
 			}
 		} else {
@@ -74,7 +94,9 @@ export default () => {
 			<Col md="12">
 				<Form onSubmit={handleSubmit(onSubmit)}>
 					<FormGroup>
-						<FormLabel htmlFor="usuario">Usuario:</FormLabel>
+						<FormLabel htmlFor="usuario">
+							Usuario:
+						</FormLabel>
 						<FormControl
 							disabled={charging}
 							isInvalid={!!errors.usuario}
@@ -89,11 +111,13 @@ export default () => {
 								},
 								maxLength: {
 									value: 50,
-									message: 'El usuario debe tener menos de 50 carácteres'
+									message:
+										'El usuario debe tener menos de 50 carácteres'
 								},
 								minLength: {
 									value: 5,
-									message: 'El usuario debe tener mas de 5 carácteres'
+									message:
+										'El usuario debe tener mas de 5 carácteres'
 								}
 							})}
 						/>
@@ -105,7 +129,9 @@ export default () => {
 					<Row>
 						<Col md="6">
 							<FormGroup>
-								<FormLabel htmlFor="nombres">Nombres:</FormLabel>
+								<FormLabel htmlFor="nombres">
+									Nombres:
+								</FormLabel>
 								<FormControl
 									disabled={charging}
 									isInvalid={!!errors.nombres}
@@ -116,11 +142,13 @@ export default () => {
 									ref={register({
 										required: {
 											value: true,
-											message: 'Su nombre es requerido'
+											message:
+												'Su nombre es requerido'
 										},
 										maxLength: {
 											value: 40,
-											message: 'Su nombre debe tener menos de 40 carácteres'
+											message:
+												'Su nombre debe tener menos de 40 carácteres'
 										}
 									})}
 								/>
@@ -131,7 +159,9 @@ export default () => {
 						</Col>
 						<Col md="6">
 							<FormGroup>
-								<FormLabel htmlFor="apellidos">Apellidos:</FormLabel>
+								<FormLabel htmlFor="apellidos">
+									Apellidos:
+								</FormLabel>
 								<FormControl
 									disabled={charging}
 									isInvalid={!!errors.apellidos}
@@ -142,11 +172,13 @@ export default () => {
 									ref={register({
 										required: {
 											value: true,
-											message: 'Su apellido es requerido'
+											message:
+												'Su apellido es requerido'
 										},
 										maxLength: {
 											value: 50,
-											message: 'Su apellido debe tener menos de 50 carácteres'
+											message:
+												'Su apellido debe tener menos de 50 carácteres'
 										}
 									})}
 								/>
@@ -158,10 +190,14 @@ export default () => {
 					</Row>
 
 					<FormGroup>
-						<FormLabel htmlFor="telefono">Teléfono:</FormLabel>
+						<FormLabel htmlFor="telefono">
+							Teléfono:
+						</FormLabel>
 						<InputGroup className="mb-2">
 							<InputGroup.Prepend>
-								<InputGroup.Text className="text-dark">+ 502</InputGroup.Text>
+								<InputGroup.Text className="text-dark">
+									+ 502
+								</InputGroup.Text>
 							</InputGroup.Prepend>
 							<FormControl
 								disabled={charging}
@@ -173,15 +209,18 @@ export default () => {
 								ref={register({
 									required: {
 										value: true,
-										message: 'Su teléfono es requerido'
+										message:
+											'Su teléfono es requerido'
 									},
 									pattern: {
 										value: /^\d{8}$/,
-										message: 'Su teléfono solo debe tener números'
+										message:
+											'Su teléfono solo debe tener números'
 									},
 									minLength: {
 										value: 8,
-										message: 'Su teléfono debe tener 8 dígitos'
+										message:
+											'Su teléfono debe tener 8 dígitos'
 									}
 								})}
 							/>
@@ -192,7 +231,9 @@ export default () => {
 					</FormGroup>
 
 					<FormGroup>
-						<FormLabel htmlFor="correo">Correo electrónico:</FormLabel>
+						<FormLabel htmlFor="correo">
+							Correo electrónico:
+						</FormLabel>
 						<FormControl
 							disabled={charging}
 							isInvalid={!!errors.correo}
@@ -219,7 +260,9 @@ export default () => {
 					<Row>
 						<Col md="6">
 							<FormGroup>
-								<FormLabel htmlFor="contrasena">Contraseña:</FormLabel>
+								<FormLabel htmlFor="contrasena">
+									Contraseña:
+								</FormLabel>
 								<FormControl
 									disabled={charging}
 									isInvalid={!!errors.contrasena}
@@ -230,7 +273,8 @@ export default () => {
 									ref={register({
 										required: {
 											value: true,
-											message: 'La contraseña es requerida'
+											message:
+												'La contraseña es requerida'
 										},
 										pattern: {
 											value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/,
@@ -240,11 +284,13 @@ export default () => {
 
 										maxLength: {
 											value: 16,
-											message: 'La contraseña debe tener menos de 16 carácteres'
+											message:
+												'La contraseña debe tener menos de 16 carácteres'
 										},
 										minLength: {
 											value: 6,
-											message: 'La contraseña debe tener mas de 5 carácteres'
+											message:
+												'La contraseña debe tener mas de 5 carácteres'
 										}
 									})}
 								/>
@@ -260,7 +306,9 @@ export default () => {
 								</FormLabel>
 								<FormControl
 									disabled={charging}
-									isInvalid={!!errors.confirmar_contrasena}
+									isInvalid={
+										!!errors.confirmar_contrasena
+									}
 									type="password"
 									name="confirmar_contrasena"
 									id="confirmar_contrasena"
@@ -268,7 +316,8 @@ export default () => {
 									ref={register({
 										required: {
 											value: true,
-											message: 'La contraseña es requerida'
+											message:
+												'La contraseña es requerida'
 										},
 										pattern: {
 											value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/,
@@ -278,23 +327,32 @@ export default () => {
 
 										maxLength: {
 											value: 16,
-											message: 'La contraseña debe tener menos de 16 carácteres'
+											message:
+												'La contraseña debe tener menos de 16 carácteres'
 										},
 										minLength: {
 											value: 6,
-											message: 'La contraseña debe tener mas de 5 carácteres'
+											message:
+												'La contraseña debe tener mas de 5 carácteres'
 										}
 									})}
 								/>
 								<Form.Control.Feedback type="invalid">
-									{errors?.confirmar_contrasena?.message}
+									{
+										errors?.confirmar_contrasena
+											?.message
+									}
 								</Form.Control.Feedback>
 							</FormGroup>
 						</Col>
 					</Row>
 
 					{charging ? (
-						<Button variant="success" type="submit" disabled block>
+						<Button
+							variant="success"
+							type="submit"
+							disabled
+							block>
 							Registrando
 							<Spinner
 								className="ml-2"
@@ -306,12 +364,18 @@ export default () => {
 							/>
 						</Button>
 					) : (
-						<Button variant="success" type="submit" block className="mb-2">
+						<Button
+							variant="success"
+							type="submit"
+							block
+							className="mb-2">
 							Registrarse
 						</Button>
 					)}
 
-					<span style={{ color: '#ff7851' }}>{errors?.form?.message}</span>
+					<span style={{ color: '#ff7851' }}>
+						{errors?.form?.message}
+					</span>
 				</Form>
 			</Col>
 		</Row>

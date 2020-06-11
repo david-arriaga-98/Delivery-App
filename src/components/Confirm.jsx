@@ -163,7 +163,7 @@ const DataComponent = (props) => {
 					? format(date, 'yyyy-MM-dd')
 					: '1900-01-01',
 				horaprogramada: check
-					? format(hour, 'hh:mm:ss')
+					? format(hour, 'HH:mm:ss')
 					: '00:00:00',
 				esprogramado: check ? 'true' : 'false'
 			};
@@ -173,11 +173,8 @@ const DataComponent = (props) => {
 			dispatch({
 				type: MapConstants.RESTART_MAP_STATE
 			});
-			/* dispatch({
-				type: HelperConstants.SHOW_SUCCESS_MODAL,
-				payload: 'Pedido realizado correctamente'
-			}); */
 			dispatch(push('/envios'));
+			return;
 		} catch (error) {
 			setResError('Ha ocurrido un error');
 		}

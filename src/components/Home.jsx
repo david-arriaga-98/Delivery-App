@@ -34,7 +34,7 @@ export default () => {
 	return (
 		<React.Fragment>
 			<Row className="justify-content-center mt-5">
-				<Col md="5" className="text-center mb-2">
+				<Col md="4" className="text-center mb-2">
 					<Button
 						variant="outline-secondary"
 						block
@@ -61,7 +61,7 @@ export default () => {
 						Calcular
 					</Button>
 				</Col>
-				<Col md="5" className="text-center mb-2">
+				<Col md="4" className="text-center mb-2">
 					<Button
 						variant="outline-secondary"
 						block
