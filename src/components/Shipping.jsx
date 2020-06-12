@@ -203,7 +203,7 @@ const ObtuvoLosDatos = ({
 					interfaz: 'U',
 					idorden: orderId,
 					idusuario: sessionStore.data.idusuario,
-					limitederegistros: 0
+					limitederegistros: 10
 				};
 
 				const { data } = await axios.post(
@@ -223,10 +223,24 @@ const ObtuvoLosDatos = ({
 		setCharging(false);
 	};
 
+	const cancelOrder = async () => {
+		try {
+			await axios.post('/Pedido/Cancelar', {
+				idpedido:
+					orders[helperStore.cancelOrderPosition].idpedido
+			});
+			orders[helperStore.cancelOrderPosition].nombreestado =
+				'Cancelado';
+			orders[helperStore.cancelOrderPosition].color = '#ff7851';
+		} catch (error) {}
+		dispatch({
+			type: HelperConstants.CANCEL_ORDER_MODAL
+		});
+	};
+
 	return (
 		<Fragment>
 			<Modal
-				size="xl"
 				onHide={() =>
 					dispatch({
 						type: HelperConstants.APPLY_FILTERS_MODAL
@@ -241,7 +255,7 @@ const ObtuvoLosDatos = ({
 				</Modal.Header>
 				<Modal.Body>
 					<Row>
-						<Col md="6">
+						<Col md="12">
 							<FormGroup>
 								<FormLabel>
 									Fecha de destino
@@ -268,7 +282,7 @@ const ObtuvoLosDatos = ({
 								</Row>
 							</FormGroup>
 						</Col>
-						<Col md="6">
+						<Col md="12">
 							<FormGroup>
 								<FormLabel>Fecha de origen</FormLabel>
 								<Row>
@@ -328,7 +342,7 @@ const ObtuvoLosDatos = ({
 								});
 							}}>
 							<i className="fas fa-plus mr-2"></i>
-							Aplicar filtros a tu búsqueda
+							Aplicar filtros
 						</Button>
 					</Col>
 					<Col>
@@ -371,6 +385,7 @@ const ObtuvoLosDatos = ({
 								info={item}
 								dispatch={dispatch}
 								key={index}
+								position={index}
 								date={
 									item.esprogramado
 										? format(
@@ -411,6 +426,7 @@ const ObtuvoLosDatos = ({
 							info={item}
 							dispatch={dispatch}
 							key={index}
+							position={index}
 							date={
 								item.esprogramado
 									? format(
@@ -441,7 +457,6 @@ const ObtuvoLosDatos = ({
 
 			<Modal
 				scrollable
-				size="lg"
 				onHide={() =>
 					dispatch({
 						type: HelperConstants.ORDER_INFORMATION_MODAL,
@@ -459,7 +474,7 @@ const ObtuvoLosDatos = ({
 				</Modal.Header>
 				<Modal.Body>
 					<Row className="justify-content-center">
-						<Col md="3">
+						<Col md="4">
 							<FormGroup>
 								<FormLabel>
 									Tiempo de espera:
@@ -471,7 +486,7 @@ const ObtuvoLosDatos = ({
 								/>
 							</FormGroup>
 						</Col>
-						<Col md="3">
+						<Col md="4">
 							<FormGroup>
 								<FormLabel>Tarifa:</FormLabel>
 								<FormControl
@@ -482,7 +497,7 @@ const ObtuvoLosDatos = ({
 							</FormGroup>
 						</Col>
 
-						<Col md="3">
+						<Col md="4">
 							<FormGroup>
 								<FormLabel>Distancia:</FormLabel>
 								<FormControl
@@ -492,23 +507,7 @@ const ObtuvoLosDatos = ({
 								/>
 							</FormGroup>
 						</Col>
-						<Col md="3">
-							<FormGroup>
-								<FormLabel>Programada:</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInfo
-											.esprogramado
-											? 'SI'
-											: 'NO'
-									}
-								/>
-							</FormGroup>
-						</Col>
-
-						<Col md="4">
+						<Col md="6">
 							<FormGroup>
 								<FormLabel>Hora estimada:</FormLabel>
 								<FormControl
@@ -522,37 +521,7 @@ const ObtuvoLosDatos = ({
 							</FormGroup>
 						</Col>
 
-						<Col md="4">
-							<FormGroup>
-								<FormLabel>Hora de Origen:</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInfo
-											.horaorigen
-									}
-								/>
-							</FormGroup>
-						</Col>
-
-						<Col md="4">
-							<FormGroup>
-								<FormLabel>
-									Hora de Destino:
-								</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInfo
-											.horadestino
-									}
-								/>
-							</FormGroup>
-						</Col>
-
-						<Col md="4">
+						<Col md="6">
 							<FormGroup>
 								<FormLabel>Fecha estimada:</FormLabel>
 								<FormControl
@@ -571,51 +540,7 @@ const ObtuvoLosDatos = ({
 								/>
 							</FormGroup>
 						</Col>
-						<Col md="4">
-							<FormGroup>
-								<FormLabel>
-									Fecha del origen del pedido:
-								</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInformationModal
-											? format(
-													new Date(
-														helperStore.orderInfo.fechaorigen
-													),
-													'dd-MM-yyyy'
-											  )
-											: ''
-									}
-								/>
-							</FormGroup>
-						</Col>
-
-						<Col md="4">
-							<FormGroup>
-								<FormLabel>
-									Fecha del destino del pedido:
-								</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInformationModal
-											? format(
-													new Date(
-														helperStore.orderInfo.fechadestino
-													),
-													'dd-MM-yyyy'
-											  )
-											: ''
-									}
-								/>
-							</FormGroup>
-						</Col>
-
-						<Col md="6">
+						<Col md="12">
 							<FormGroup>
 								<FormLabel>
 									Identificación de la orden:
@@ -625,20 +550,6 @@ const ObtuvoLosDatos = ({
 									readOnly
 									value={
 										helperStore.orderInfo.idorden
-									}
-								/>
-							</FormGroup>
-						</Col>
-						<Col md="6">
-							<FormGroup>
-								<FormLabel>
-									Identificación del pedido:
-								</FormLabel>
-								<FormControl
-									className="bg-primary text-white"
-									readOnly
-									value={
-										helperStore.orderInfo.idpedido
 									}
 								/>
 							</FormGroup>
@@ -694,6 +605,50 @@ const ObtuvoLosDatos = ({
 					</Button>
 				</Modal.Footer>
 			</Modal>
+
+			<Modal
+				scrollable
+				onHide={() =>
+					dispatch({
+						type: HelperConstants.CANCEL_ORDER_MODAL
+					})
+				}
+				show={helperStore.cancelOrderModal}>
+				<Modal.Header closeButton>
+					<Modal.Title>
+						<i className="fas fa-info-circle mr-2"></i>
+						Confirmar
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body className="text-center">
+					<p className="text-black-50">
+						¿Seguro que deseas cancelar tu pedido?
+					</p>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button
+						variant="primary"
+						size="sm"
+						onClick={cancelOrder}>
+						<i className="fas fa-check mr-2"></i>
+						Si
+					</Button>
+
+					<Button
+						className="ml-2"
+						onClick={() => {
+							dispatch({
+								type:
+									HelperConstants.CANCEL_ORDER_MODAL
+							});
+						}}
+						variant="danger"
+						size="sm">
+						<i className="fas fa-times mr-2"></i>
+						No
+					</Button>
+				</Modal.Footer>
+			</Modal>
 		</Fragment>
 	);
 };
@@ -706,33 +661,76 @@ const ShippingCard = ({
 	to,
 	info,
 	helperStore,
-	dispatch
+	dispatch,
+	position
 }) => {
+	let spinn = undefined;
+
+	switch (info.nombreestado) {
+		case 'Pendiente':
+			spinn = (
+				<Spinner
+					style={{ backgroundColor: info.color }}
+					animation="grow"
+					size="sm"
+				/>
+			);
+			break;
+		case 'En Progreso':
+			spinn = (
+				<Spinner
+					color={info.color}
+					animation="grow"
+					size="sm"
+				/>
+			);
+			break;
+		case 'Finalizado':
+			spinn = (
+				<div
+					className="order__status--ok"
+					style={{ backgroundColor: info.color }}></div>
+			);
+			break;
+		case 'Cancelado':
+			spinn = (
+				<div
+					className="order__status--ok"
+					style={{ backgroundColor: info.color }}></div>
+			);
+			break;
+		default:
+			spinn = (
+				<div
+					className="order__status--ok"
+					style={{ backgroundColor: 'blue' }}></div>
+			);
+			break;
+	}
+
 	return (
 		<Fragment>
-			<Col
-				md="9"
-				className="mb-3 put-hand"
-				onClick={() => {
-					dispatch({
-						type: HelperConstants.ORDER_INFORMATION_MODAL,
-						payload: {
-							info,
-							state: true
-						}
-					});
-				}}>
-				<Card style={{ border: '1px solid gray' }}>
+			<Col md="9" className="mb-3">
+				<Card>
 					<Card.Body>
 						<Row>
 							<Col md="3">
-								<Image
-									src="https://miro.medium.com/max/1400/1*qYUvh-EtES8dtgKiBRiLsA.png"
-									width="150px"
-									style={{
-										border: '1px solid #ced4da'
-									}}
-								/>
+								<Row>
+									<Col md="9">
+										<Image
+											src="https://miro.medium.com/max/1400/1*qYUvh-EtES8dtgKiBRiLsA.png"
+											width="120px"
+											height="100px"
+											className="order__image"
+											style={{
+												border:
+													'3px solid rgba(0,0,0,.3)',
+												borderRadius: '.5rem'
+											}}
+										/>
+									</Col>
+									<Col md="3">{spinn}</Col>
+								</Row>
 							</Col>
 							<Col md="9">
 								<Row>
@@ -765,6 +763,68 @@ const ShippingCard = ({
 											{to}
 										</span>
 									</Col>
+								</Row>
+
+								<Row className="justify-content-center">
+									{info.nombreestado ===
+									'Pendiente' ? (
+										<Col
+											md="12"
+											className="mt-3 text-right">
+											<Button
+												onClick={() => {
+													dispatch({
+														type:
+															HelperConstants.ORDER_INFORMATION_MODAL,
+														payload: {
+															info,
+															state: true
+														}
+													});
+												}}
+												variant="primary"
+												size="sm">
+												<i className="fas fa-eye mr-2"></i>
+												Información
+											</Button>
+
+											<Button
+												className="ml-2"
+												onClick={() => {
+													dispatch({
+														type:
+															HelperConstants.CANCEL_ORDER_MODAL,
+														payload: position
+													});
+												}}
+												variant="danger"
+												size="sm">
+												<i className="fas fa-times mr-2"></i>
+												Cancelar tu pedido
+											</Button>
+										</Col>
+									) : (
+										<Col
+											md="12"
+											className="mt-3 text-right">
+											<Button
+												onClick={() => {
+													dispatch({
+														type:
+															HelperConstants.ORDER_INFORMATION_MODAL,
+														payload: {
+															info,
+															state: true
+														}
+													});
+												}}
+												variant="primary"
+												size="sm">
+												<i className="fas fa-eye mr-2"></i>
+												Información
+											</Button>
+										</Col>
+									)}
 								</Row>
 							</Col>
 						</Row>

@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { ConnectedRouter } from 'connected-react-router';
 // Components
-import HeaderComponent from './components/Header';
-import FooterComponent from './components/Footer';
+import HeaderComponent from './components/Header'; /* 
+import FooterComponent from './components/Footer'; */
 import HomeComponent from './components/Home';
 import SessionComponent from './components/Session';
 import ShippingComponent from './components/Shipping';

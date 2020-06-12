@@ -185,7 +185,8 @@ const MapContainer = (props) => {
 	// Propiedades del mapa
 	const mapProps = {
 		mapStyle: {
-			border: '1px solid #ced4da'
+			border: '2px solid rgba(0,0,0,.3)',
+			borderRadius: '.5rem'
 		},
 		center: {
 			lat: 14.601906,
@@ -238,7 +239,7 @@ const MapContainer = (props) => {
 			<Col md="8" className="mt-2">
 				{charging ? (
 					<Button
-						variant="success"
+						variant="primary"
 						type="submit"
 						disabled
 						block>
@@ -254,7 +255,7 @@ const MapContainer = (props) => {
 					</Button>
 				) : (
 					<Button
-						variant="success"
+						variant="primary"
 						type="submit"
 						block
 						onClick={dispatchAction}>

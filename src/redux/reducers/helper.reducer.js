@@ -9,6 +9,8 @@ const initialState = {
 	searchSends: {
 		filterModal: false
 	},
+	cancelOrderModal: false,
+	cancelOrderPosition: null,
 	orderInformationModal: false,
 	orderInfo: {
 		direcciondes: '',
@@ -77,6 +79,14 @@ export default (state = initialState, action) => {
 				searchSends: {
 					filterModal: !state.searchSends.filterModal
 				}
+			});
+
+		case HelperConstants.CANCEL_ORDER_MODAL:
+			return Object.assign({}, state, {
+				cancelOrderModal: !state.cancelOrderModal,
+				cancelOrderPosition: !state.cancelOrderModal
+					? action.payload
+					: null
 			});
 
 		case HelperConstants.ORDER_INFORMATION_MODAL:

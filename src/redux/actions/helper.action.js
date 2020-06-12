@@ -32,3 +32,10 @@ export const ORDER_INFORMATION_MODAL = (payload) => {
 		payload
 	};
 };
+
+export const CANCEL_ORDER_MODAL = (payload) => {
+	return {
+		type: HelperConstants.CANCEL_ORDER_MODAL,
+		payload
+	};
+};

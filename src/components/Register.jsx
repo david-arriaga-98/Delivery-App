@@ -17,8 +17,6 @@ import Axios from '../utils/Axios';
 import HelperConstants from '../constants/Helper';
 import SessionConstants from '../constants/Session';
 
-console.log(Axios);
-
 export default () => {
 	const {
 		register,
@@ -67,7 +65,7 @@ export default () => {
 						setError(
 							'form',
 							'validation',
-							error.response.data[0].mensaje
+							'Ha ocurrido un error al realizar tu petición'
 						);
 					}
 				} else {
@@ -349,7 +347,7 @@ export default () => {
 
 					{charging ? (
 						<Button
-							variant="success"
+							variant="primary"
 							type="submit"
 							disabled
 							block>
@@ -365,7 +363,7 @@ export default () => {
 						</Button>
 					) : (
 						<Button
-							variant="success"
+							variant="primary"
 							type="submit"
 							block
 							className="mb-2">

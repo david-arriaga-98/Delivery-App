@@ -49,5 +49,24 @@ body {
 }
 
 .form-label {
-	color: #414242;
+	color: rgba(0, 0, 0, 0.58);
+}
+
+.order__image {
+	border-radius: 5px;
+}
+
+.order__status--ok {
+	width: 1rem;
+	height: 1rem;
+	border-radius: 50%;
+	border: 1px solod #454b5c;
+}
+
+.card {
+	border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+	color: snow;
 }
