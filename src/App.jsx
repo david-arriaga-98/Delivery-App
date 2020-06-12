@@ -7,7 +7,7 @@ import HeaderComponent from './components/Header'; /*
 import FooterComponent from './components/Footer'; */
 import HomeComponent from './components/Home';
 import SessionComponent from './components/Session';
-import ShippingComponent from './components/Shipping';
+import ShippingComponent from './components/Shipping/Shipping';
 
 import ResponseModalComponent from './components/Responses/Response';
 

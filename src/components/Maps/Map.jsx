@@ -172,6 +172,13 @@ const MapContainer = (props) => {
 			lng: clickEvent.latLng.lng()
 		});
 	};
+
+	const handleKeyUp = (e) => {
+		if (e.keyCode === 13) {
+			dispatchAction();
+		}
+	};
+
 	const handleChange = (e) => {
 		setIndication(e.target.value);
 	};
@@ -185,7 +192,7 @@ const MapContainer = (props) => {
 	// Propiedades del mapa
 	const mapProps = {
 		mapStyle: {
-			border: '2px solid rgba(0,0,0,.3)',
+			border: '3px solid rgba(0,0,0,.3)',
 			borderRadius: '.5rem'
 		},
 		center: {
@@ -209,7 +216,7 @@ const MapContainer = (props) => {
 							<Marker
 								icon={{
 									url:
-										'https://image.flaticon.com/icons/png/512/93/93381.png',
+										'https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/7576997921582962152-512.png',
 									anchor: new google.maps.Point(
 										16,
 										16
@@ -232,6 +239,7 @@ const MapContainer = (props) => {
 					placeholder="Indicaciones de ubicación"
 					name="indications"
 					onChange={handleChange}
+					onKeyUp={handleKeyUp}
 					value={indication}
 				/>
 				<span className="error-message">{error}</span>

@@ -1,5 +1,4 @@
-import './assets/css/bootstrap.css';
-import './index.css';
+import './assets/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, ReactReduxContext } from 'react-redux';

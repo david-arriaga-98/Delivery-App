@@ -19,12 +19,19 @@ export default () => {
 	const dispatch = useDispatch();
 
 	return (
-		<Navbar variant="dark" className="color_orange">
+		<Navbar variant="dark" className="bg-orange" fixed="top">
 			<Navbar.Brand
 				className="put-hand"
 				onClick={() => {
 					dispatch(push('/'));
 				}}>
+				<img
+					alt=""
+					src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/12497200791578289015-512.png"
+					width="40"
+					height="40"
+					className="d-inline-block align-top"
+				/>{' '}
 				EvoSys
 			</Navbar.Brand>
 

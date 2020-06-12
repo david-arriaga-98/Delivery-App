@@ -99,7 +99,7 @@ export default () => {
 					<FormGroup>
 						{state.isLoading ? (
 							<Button
-								variant="primary"
+								variant="success"
 								type="submit"
 								disabled
 								block>
@@ -115,7 +115,7 @@ export default () => {
 							</Button>
 						) : (
 							<Button
-								variant="primary"
+								variant="success"
 								type="submit"
 								block>
 								Iniciar Sesión

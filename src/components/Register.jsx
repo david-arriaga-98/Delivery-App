@@ -347,7 +347,7 @@ export default () => {
 
 					{charging ? (
 						<Button
-							variant="primary"
+							variant="success"
 							type="submit"
 							disabled
 							block>
@@ -363,7 +363,7 @@ export default () => {
 						</Button>
 					) : (
 						<Button
-							variant="primary"
+							variant="success"
 							type="submit"
 							block
 							className="mb-2">
