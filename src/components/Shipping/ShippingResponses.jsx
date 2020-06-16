@@ -3,6 +3,8 @@ import React from 'react';
 import { Row, Col, Button, Spinner } from 'react-bootstrap';
 
 export const HuboUnErrorAlObtenerLosDatos = () => {
+	console.log('ejecutando responses');
+
 	return (
 		<Col md="9" className="mt-4 text-center">
 			<h5 className="text-danger">

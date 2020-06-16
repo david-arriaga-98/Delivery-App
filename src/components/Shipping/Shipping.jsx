@@ -18,6 +18,7 @@ export default () => {
 	const helperStore = useSelector((state) => state.helper);
 	const sessionStore = useSelector((state) => state.session);
 	const dispatch = useDispatch();
+	console.log('ejecutando principal');
 
 	useEffect(() => {
 		if (orders.length === 0 && !gotData && respError === '') {

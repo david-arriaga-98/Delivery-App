@@ -56,6 +56,7 @@ export default () => {
 									MapConstants.OPEN_CLOSE_CONFIRM_MODAL
 							})
 						}>
+						<i className="fas fa-calculator mr-2"></i>
 						Calcular
 					</Button>
 				</Col>

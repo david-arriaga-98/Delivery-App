@@ -149,6 +149,7 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 		setOrderID('');
 		setError('');
 	};
+	console.log('ejecutando main');
 
 	const cancelOrder = async () => {
 		try {

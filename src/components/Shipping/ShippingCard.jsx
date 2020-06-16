@@ -58,6 +58,7 @@ const ShippingCard = ({
 			);
 			break;
 	}
+	console.log('ejecutando tarjeta');
 
 	return (
 		<Fragment>
@@ -186,4 +187,4 @@ const ShippingCard = ({
 	);
 };
 
-export default ShippingCard;
+export default React.memo(ShippingCard);

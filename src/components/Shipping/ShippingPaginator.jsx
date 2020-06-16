@@ -3,9 +3,10 @@ import { Pagination, Col } from 'react-bootstrap';
 import ShippingCard from './ShippingCard';
 import { format } from 'date-fns';
 
-export default ({ data, dispatch, renderPaginator }) => {
+const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
 	let totalPages = Math.ceil(data.length / 5);
 	let paginationItems = [];
+	console.log('ejecutando paginator');
 
 	const [page, setPage] = useState(1);
 	const [dataToPaint, setDataToPaint] = useState([]);
@@ -99,3 +100,5 @@ const getRange = (index) => {
 		max
 	};
 };
+
+export default React.memo(ShippingPaginator);
