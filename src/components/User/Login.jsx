@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 /* import sha256 from 'crypto-js/sha256'; */
 
-import sessionConstants from '../constants/Session';
+import sessionConstants from '../../constants/Session';
 
 export default () => {
 	const { register, errors, handleSubmit } = useForm();
@@ -78,7 +78,7 @@ export default () => {
 							<FormControl
 								disabled={state.isLoading}
 								type="password"
-								placeholder="Ingrese su usuario"
+								placeholder="Ingrese su contraseña"
 								name="contrasena"
 								id="contrasena"
 								ref={register({

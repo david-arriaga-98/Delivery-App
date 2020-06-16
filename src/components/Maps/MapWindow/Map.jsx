@@ -5,13 +5,22 @@ import {
 	Col,
 	FormControl,
 	Button,
-	Spinner
+	Spinner,
+	InputGroup
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
 
-import MapConstants from '../../constants/Map';
-import { Api } from '../../constants/Common';
+import MapConstants from '../../../constants/Map';
+import { Api } from '../../../constants/Common';
+
+const SearchSearch = ({ searchLocale }) => (
+	<InputGroup.Text
+		className="bg-primary put-hand"
+		onClick={searchLocale}>
+		<i className="fas fa-search text-white"></i>
+	</InputGroup.Text>
+);
 
 const MapContainer = (props) => {
 	// Props
@@ -30,6 +39,29 @@ const MapContainer = (props) => {
 	const [error, setError] = useState('');
 	const [indication, setIndication] = useState('');
 	const dispatch = useDispatch();
+
+	// Localizacion
+	const [locale, setLocale] = useState('');
+
+	const onChg = (e) => {
+		setLocale(e.target.value);
+	};
+
+	const searchLocale = async () => {
+		const newChar = locale.replace(' ', '+');
+		// Hacemos la peticion
+		try {
+			const url = `${Api.GEOCODING_URL}address=${newChar}&key=${Api.GOOGLE_API_KEY}`;
+			const { data } = await Axios.get(url);
+			setMarker({
+				...marker,
+				lat: data.results[0].geometry.location.lat,
+				lng: data.results[0].geometry.location.lng
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const store = useSelector((state) => state.map);
 
@@ -157,7 +189,7 @@ const MapContainer = (props) => {
 	};
 	const getDirection = async () => {
 		try {
-			const url = `${Api.GEOCODING_URL}${marker.lat},${marker.lng}&key=${Api.GOOGLE_API_KEY}`;
+			const url = `${Api.GEOCODING_URL}latlng=${marker.lat},${marker.lng}&key=${Api.GOOGLE_API_KEY}`;
 			const { data } = await Axios.get(url);
 			return data;
 		} catch (error) {
@@ -202,6 +234,19 @@ const MapContainer = (props) => {
 	};
 	return (
 		<Row className="justify-content-center mb-4 ">
+			<Col md="5">
+				<InputGroup className="mb-2">
+					<FormControl
+						onChange={onChg}
+						type="text"
+						placeholder="Ingrese el lugar a buscar"
+					/>
+
+					<InputGroup.Append>
+						<SearchSearch searchLocale={searchLocale} />
+					</InputGroup.Append>
+				</InputGroup>
+			</Col>
 			<Col md="11" className="px-0">
 				<div style={style}>
 					<Map

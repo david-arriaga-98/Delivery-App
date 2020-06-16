@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router';
 
-export default ({ component: Component, otros }) => {
+export default ({ component: Component, others }) => {
 	const { isLoggedIn, data } = useSelector(
 		(state) => state.session
 	);
@@ -16,7 +16,7 @@ export default ({ component: Component, otros }) => {
 			: true;
 	return (
 		<Route
-			{...otros}
+			{...others}
 			render={(props) =>
 				applicationState ? (
 					<Component {...props} />

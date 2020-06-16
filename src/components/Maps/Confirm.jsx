@@ -7,17 +7,15 @@ import {
 	FormLabel,
 	FormGroup,
 	Button,
-	Spinner
+	Spinner,
+	Form,
+	Image
 } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import { GoogleApiWrapper, Map } from 'google-maps-react';
-import { LoadingContainer } from './Maps/Map';
-import Axios from '../utils/Axios';
-import MapConstants from '../constants/Map';
+import Axios from '../../utils/Axios';
 import { push } from 'connected-react-router';
 /* import HelperConstants from '../constants/Helper'; */
 import { format } from 'date-fns';
-import { Api } from '../constants/Common';
+import MapConstants from '../../constants/Map';
 import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
 
 const MainComponent = (props) => {
@@ -125,7 +123,7 @@ const ErrorResponse = (props) => {
 
 const DataComponent = (props) => {
 	// Props
-	const { google, travelData, origin, destiny, dispatch } = props;
+	const { travelData, origin, destiny, dispatch } = props;
 
 	// Hooks
 	const [check, setCheck] = useState(false);
@@ -136,21 +134,6 @@ const DataComponent = (props) => {
 
 	const [date, setDate] = useState(new Date());
 	const [hour, setHour] = useState(new Date());
-
-	// Maps property
-	const mapProps = {
-		mapStyle: {
-			border: '1px solid #ced4da'
-		},
-		center: {
-			lat: 14.601906,
-			lng: -90.5817001
-		}
-	};
-	const style = {
-		width: '80%',
-		height: '45vh'
-	};
 
 	// Functions
 
@@ -216,11 +199,15 @@ const DataComponent = (props) => {
 				</FormGroup>
 				<Row className="justify-content-center">
 					<Col md="11" className="px-0">
-						<div style={style}>
-							<Map
-								google={google}
-								style={mapProps.mapStyle}></Map>
-						</div>
+						<Image
+							src="https://miro.medium.com/max/1400/1*qYUvh-EtES8dtgKiBRiLsA.png"
+							width="100%"
+							className="order__image"
+							style={{
+								border: '3px solid rgba(0,0,0,.3)',
+								borderRadius: '.5rem'
+							}}
+						/>
 					</Col>
 				</Row>
 			</Col>
@@ -234,7 +221,7 @@ const DataComponent = (props) => {
 						</Col>
 						<Col md="5">
 							<p className="text-success">
-								{travelData.tiempoespera}
+								{`${travelData.tiempoespera} hrs`}
 							</p>
 						</Col>
 					</Row>
@@ -262,7 +249,7 @@ const DataComponent = (props) => {
 						</Col>
 						<Col md="5">
 							<p className="text-success">
-								{travelData.distancia}
+								{`${travelData.distancia} km`}
 							</p>
 						</Col>
 					</Row>
@@ -384,7 +371,4 @@ const ChargingComponent = () => (
 	</Row>
 );
 
-export default GoogleApiWrapper({
-	apiKey: Api.GOOGLE_API_KEY,
-	LoadingContainer
-})(MainComponent);
+export default MainComponent;

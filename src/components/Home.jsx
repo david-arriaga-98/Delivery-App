@@ -1,10 +1,8 @@
 import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Modal } from 'react-bootstrap';
 
-import Modal from 'react-bootstrap/Modal';
-
-import Map from './Maps/Map';
-import Confirm from './Confirm';
+import Map from './Maps/MapWindow/Map';
+import Confirm from './Maps/Confirm';
 
 import MapConstants from '../constants/Map';
 
@@ -47,7 +45,7 @@ export default () => {
 						{originText}
 					</Button>
 				</Col>
-				<Col xs="5" md="2" className="text-center mb-2">
+				<Col md="2" className="text-center mb-2">
 					<Button
 						block
 						variant="success"

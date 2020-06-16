@@ -13,9 +13,9 @@ import {
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
-import Axios from '../utils/Axios';
-import HelperConstants from '../constants/Helper';
-import SessionConstants from '../constants/Session';
+import Axios from '../../utils/Axios';
+import HelperConstants from '../../constants/Helper';
+import SessionConstants from '../../constants/Session';
 
 export default () => {
 	const {
@@ -193,7 +193,7 @@ export default () => {
 						</FormLabel>
 						<InputGroup className="mb-2">
 							<InputGroup.Prepend>
-								<InputGroup.Text className="text-dark">
+								<InputGroup.Text className="text-text-black-50">
 									+ 502
 								</InputGroup.Text>
 							</InputGroup.Prepend>

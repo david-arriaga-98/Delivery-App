@@ -2,20 +2,19 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { ConnectedRouter } from 'connected-react-router';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import esLocale from 'date-fns/locale/es';
+
 // Components
-import HeaderComponent from './components/Header'; /* 
-import FooterComponent from './components/Footer'; */
+import HeaderComponent from './components/Common/Header';
 import HomeComponent from './components/Home';
 import SessionComponent from './components/Session';
 import ShippingComponent from './components/Shipping/Shipping';
-
+import ProfileComponent from './components/User/Profile';
 import ResponseModalComponent from './components/Responses/Response';
 
 import ImageMain from './assets/img/banner.png';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-
-import esLocale from 'date-fns/locale/es';
 
 const Main = () => {
 	return (
@@ -52,7 +51,11 @@ function App({ history, context }) {
 							path={'/home'}
 							component={HomeComponent}
 						/>
-
+						<SessionComponent
+							exact
+							path={'/perfil'}
+							component={ProfileComponent}
+						/>
 						<SessionComponent
 							exact
 							path={'/envios'}
@@ -70,7 +73,6 @@ function App({ history, context }) {
 						</Route>
 					</Switch>
 				</Container>
-				{/* <FooterComponent /> */}
 			</MuiPickersUtilsProvider>
 		</ConnectedRouter>
 	);

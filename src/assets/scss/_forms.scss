@@ -1,0 +1,10 @@
+.form {
+	&-control {
+		&:focus {
+			border-color: #d0eae2;
+		}
+		&:hover {
+			border-color: transparent;
+		}
+	}
+}
