@@ -1,8 +1,19 @@
-import Axios from '../Axios';
+import Axios from '../../utils/Axios';
 import CryptoJS from 'crypto-js';
 import { Api } from '../../constants/Common';
 import { addDays, getUnixTime } from 'date-fns';
 import Validator from 'validator';
+
+export const getCurrentUser = async (idusuario) => {
+	try {
+		const { data } = await Axios.post('/Usuario/Listar', {
+			idusuario
+		});
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
 
 export const executeServerPetition = async (method, url, params) => {
 	try {

@@ -4,13 +4,11 @@ import ShippingCard from './ShippingCard';
 import { format } from 'date-fns';
 
 const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
-	let totalPages = Math.ceil(data.length / 5);
+	let totalPages = Math.ceil(data.length / 6);
 	let paginationItems = [];
-	console.log('ejecutando paginator');
 
 	const [page, setPage] = useState(1);
 	const [dataToPaint, setDataToPaint] = useState([]);
-	const [isPaint, setIsPaint] = useState(false);
 
 	for (let i = 1; i <= totalPages; i++) {
 		paginationItems.push(
@@ -24,13 +22,6 @@ const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
 			</Pagination.Item>
 		);
 	}
-	// eslint-disable-next-line
-	useEffect(() => {
-		if (page === 1 && !isPaint) {
-			changePage(1);
-			setIsPaint(true);
-		}
-	});
 
 	const changePage = (page) => {
 		setPage(page);
@@ -42,6 +33,14 @@ const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
 		);
 		setDataToPaint(newData);
 	};
+	// eslint-disable-next-line
+	useEffect(() => {
+		changePage(page);
+	}, [page, data]);
+
+	useEffect(() => {
+		setPage(1);
+	}, [data]);
 
 	return (
 		<React.Fragment>

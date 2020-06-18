@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-	Col,
-	Row,
-	FormControl,
-	Button,
-	Spinner
-} from 'react-bootstrap';
+import { Col, FormControl, Button, Spinner } from 'react-bootstrap';
 import { searchByLocation } from '../../../services/Map/searchLocation';
 import { useDispatch } from 'react-redux';
 import MapConstants from '../../../constants/Map';

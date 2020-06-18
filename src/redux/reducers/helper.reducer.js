@@ -9,6 +9,7 @@ const initialState = {
 	searchSends: {
 		filterModal: false
 	},
+	qualifyModal: false,
 	cancelOrderModal: false,
 	cancelOrderPosition: null,
 	orderInformationModal: false,
@@ -87,6 +88,10 @@ export default (state = initialState, action) => {
 				cancelOrderPosition: !state.cancelOrderModal
 					? action.payload
 					: null
+			});
+		case HelperConstants.QUALIFY_MODAL:
+			return Object.assign({}, state, {
+				qualifyModal: !state.qualifyModal
 			});
 
 		case HelperConstants.ORDER_INFORMATION_MODAL:

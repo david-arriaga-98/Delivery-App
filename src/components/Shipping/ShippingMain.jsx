@@ -15,8 +15,6 @@ import { format } from 'date-fns';
 
 import Validator from 'validator';
 
-import { KeyboardDatePicker } from '@material-ui/pickers';
-
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../utils/Axios';
 
@@ -47,18 +45,18 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 	] = useState(false);
 
 	// Dates
-	const [destFrom, setDestFrom] = useState(null);
+	/* const [destFrom, setDestFrom] = useState(null);
 	const [destTo, setDestTo] = useState(null);
 
 	const [orgFrom, setOrgFrom] = useState(null);
-	const [orgTo, setOrgTo] = useState(null);
+	const [orgTo, setOrgTo] = useState(null); */
 	const [disableInput, setDisableInput] = useState(false);
 
 	const onChange = (e) => {
 		setOrderID(e.target.value);
 	};
 
-	const onClickFromModal = async () => {
+	/* const onClickFromModal = async () => {
 		setError('');
 		setCharging(true);
 		setUseDataFromThisComponent(true);
@@ -97,39 +95,32 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 		}
 		setIsCharget(true);
 		setCharging(false);
-	};
+	}; */
 
 	const onClick = async () => {
 		setError('');
 		setCharging(true);
 		// Validamos que por lo menos haya escrito algo
 		if (!Validator.isEmpty(orderId)) {
-			// Validamos que el uuid sea válido
-			if (Validator.isUUID(orderId)) {
-				// Hacemos la peticion al servidor
-				setUseDataFromThisComponent(true);
-				setDisableInput(true);
-				try {
-					const dataToSend = {
-						interfaz: 'U',
-						idorden: orderId,
-						idusuario: sessionStore.data.idusuario,
-						limitederegistros: 10
-					};
+			setUseDataFromThisComponent(true);
+			setDisableInput(true);
+			const newOrders = [];
+			let len = orderId.length;
+			for (let i in orders) {
+				let order = orders[i].idorden;
+				let str = order.substring(0, len);
 
-					const { data } = await axios.post(
-						'/Entregas/Listar',
-						dataToSend
-					);
-					setDataFromThisComponent(data.reverse());
-				} catch (e) {
-					setError(
-						'Ha ocurrido un error al consultar al servidor'
-					);
+				if (
+					orderId.length <= order.length &&
+					orderId.length !== 0 &&
+					order.length !== 0
+				) {
+					if (orderId === str) {
+						newOrders.push(orders[i]);
+					}
 				}
-			} else {
-				setError('La orden no es válida');
 			}
+			setDataFromThisComponent(newOrders);
 		} else {
 			setError('Este campo no puede estar vacío');
 		}
@@ -137,8 +128,10 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 		setCharging(false);
 	};
 
-	const onKeyUp = (e) => {
-		if (e.keyCode === 13) {
+	const onKeyUp = () => {
+		if (orderId.length === 0) {
+			clearOrder();
+		} else {
 			onClick();
 		}
 	};
@@ -146,10 +139,10 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 	const clearOrder = () => {
 		setDisableInput(false);
 		setUseDataFromThisComponent(false);
+		setDataFromThisComponent([]);
 		setOrderID('');
 		setError('');
 	};
-	console.log('ejecutando main');
 
 	const cancelOrder = async () => {
 		try {
@@ -169,8 +162,8 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 	return (
 		<Fragment>
 			<Col md="9" className="mb-4">
-				<Row className="justify-content-between">
-					<Col>
+				<Row className="justify-content-end">
+					{/* <Col>
 						<Button
 							onClick={() => {
 								dispatch({
@@ -181,11 +174,10 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 							<i className="fas fa-plus mr-2"></i>
 							Aplicar filtros
 						</Button>
-					</Col>
-					<Col>
-						<InputGroup className="mb-2">
+					</Col> */}
+					<Col md="7">
+						<InputGroup>
 							<FormControl
-								disabled={disableInput}
 								type="text"
 								placeholder="Ingrese el ID de su orden"
 								onChange={onChange}
@@ -195,7 +187,7 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 
 							<InputGroup.Append>
 								{!disableInput ? (
-									<SearchSearch action={onClick} />
+									<SearchSearch />
 								) : (
 									<TrashSearch
 										action={clearOrder}
@@ -428,14 +420,14 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 			<Modal
 				onHide={() =>
 					dispatch({
-						type: HelperConstants.APPLY_FILTERS_MODAL
+						type: HelperConstants.QUALIFY_MODAL
 					})
 				}
-				show={helperStore.searchSends.filterModal}>
+				show={helperStore.qualifyModal}>
 				<Modal.Header closeButton>
 					<Modal.Title>
-						<i className="fas fa-filter mr-2"></i>
-						Filtrar la búsqueda
+						<i className="fas fa-file-alt mr-2"></i>
+						Califica tu servicio
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -443,53 +435,9 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 						<Col md="12">
 							<FormGroup>
 								<FormLabel>
-									Fecha de destino
+									Ingrese una reseña
 								</FormLabel>
-								<Row>
-									<Col md="5">
-										<KeyboardDatePicker
-											clearable
-											value={destFrom}
-											format={'dd-MM-yyyy'}
-											helperText="desde"
-											onChange={setDestFrom}
-										/>
-									</Col>
-									<Col md="5">
-										<KeyboardDatePicker
-											clearable
-											value={destTo}
-											format={'dd-MM-yyyy'}
-											helperText="hasta"
-											onChange={setDestTo}
-										/>
-									</Col>
-								</Row>
-							</FormGroup>
-						</Col>
-						<Col md="12">
-							<FormGroup>
-								<FormLabel>Fecha de origen</FormLabel>
-								<Row>
-									<Col md="5">
-										<KeyboardDatePicker
-											clearable
-											value={orgFrom}
-											format={'dd-MM-yyyy'}
-											helperText="desde"
-											onChange={setOrgFrom}
-										/>
-									</Col>
-									<Col md="5">
-										<KeyboardDatePicker
-											clearable
-											value={orgTo}
-											format={'dd-MM-yyyy'}
-											helperText="hasta"
-											onChange={setOrgTo}
-										/>
-									</Col>
-								</Row>
+								<FormControl as="textarea" rows="3" />
 							</FormGroup>
 						</Col>
 					</Row>
@@ -500,19 +448,15 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 						size="sm"
 						onClick={() => {
 							dispatch({
-								type:
-									HelperConstants.APPLY_FILTERS_MODAL
+								type: HelperConstants.QUALIFY_MODAL
 							});
 						}}>
 						<i className="fas fa-times mr-2"></i>
 						Cancelar
 					</Button>
-					<Button
-						variant="info"
-						size="sm"
-						onClick={onClickFromModal}>
-						<i className="fas fa-search mr-2"></i>
-						Buscar
+					<Button variant="info" size="sm">
+						<i className="fas fa-share-square mr-2"></i>
+						Enviar
 					</Button>
 				</Modal.Footer>
 			</Modal>
@@ -526,8 +470,8 @@ const TrashSearch = ({ action }) => (
 	</InputGroup.Text>
 );
 
-const SearchSearch = ({ action }) => (
-	<InputGroup.Text onClick={action} className="bg-primary put-hand">
+const SearchSearch = () => (
+	<InputGroup.Text className="bg-primary">
 		<i className="fas fa-search text-white"></i>
 	</InputGroup.Text>
 );

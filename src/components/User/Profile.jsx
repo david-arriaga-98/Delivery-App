@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import {
 	FormGroup,
 	FormLabel,
@@ -8,8 +7,43 @@ import {
 	Card,
 	Button
 } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from '../../services/User/user.session';
 
 export default () => {
+	const userState = useSelector((state) => state.session);
+	const [error, setError] = useState('');
+	const [gotData, setGotData] = useState(false);
+	const [user, setUser] = useState({
+		user: '...',
+		name: '...',
+		lastname: '...',
+		phone: '...',
+		email: '...'
+	});
+
+	React.useEffect(() => {
+		const execute = async () => {
+			if (!gotData) {
+				setGotData(true);
+				try {
+					const data = await getCurrentUser(
+						userState.data.idusuario
+					);
+
+					setUser({
+						...user,
+						name: data[0].nombres,
+						lastname: data[0].apellidos
+					});
+				} catch (error) {
+					setError('Ha ocurrido un error');
+				}
+			}
+		};
+		execute();
+	});
+
 	return (
 		<Row className="justify-content-center mb-4">
 			<Card border="secondary">
@@ -27,7 +61,7 @@ export default () => {
 						<FormControl
 							readOnly
 							type="text"
-							value="Usuario"
+							value={user.user}
 							className="bg-secondary text-white"
 						/>
 					</FormGroup>
@@ -41,7 +75,7 @@ export default () => {
 								<FormControl
 									readOnly
 									type="text"
-									value="Nombres del usuario"
+									value={user.name}
 									className="bg-secondary text-white"
 								/>
 							</FormGroup>
@@ -54,7 +88,7 @@ export default () => {
 								<FormControl
 									readOnly
 									type="text"
-									value="Apellidos del usuario"
+									value={user.lastname}
 									className="bg-secondary text-white"
 								/>
 							</FormGroup>
@@ -69,7 +103,7 @@ export default () => {
 						<FormControl
 							readOnly
 							type="text"
-							value="Telefono del usuario"
+							value={user.phone}
 							className="bg-secondary text-white"
 						/>
 					</FormGroup>
@@ -81,7 +115,7 @@ export default () => {
 						<FormControl
 							readOnly
 							type="text"
-							value="Correo del usuario"
+							value={user.email}
 							className="bg-secondary text-white"
 						/>
 					</FormGroup>

@@ -99,7 +99,7 @@ const MapContainer = ({ google, type }) => {
 				<Col md="11" className="px-0">
 					<div style={mapProps.style}>
 						<Map
-							zoom={10}
+							zoom={15}
 							google={google}
 							style={mapProps.mapStyle}
 							onClick={handleClick}
