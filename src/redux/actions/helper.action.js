@@ -39,3 +39,10 @@ export const CANCEL_ORDER_MODAL = (payload) => {
 		payload
 	};
 };
+
+export const QUALIFY_MODAL = (payload) => {
+	return {
+		type: HelperConstants.QUALIFY_MODAL,
+		payload
+	};
+};

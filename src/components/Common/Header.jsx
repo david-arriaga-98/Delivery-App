@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Image } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 
@@ -8,6 +8,8 @@ import Login from '../User/Login';
 import Register from '../User/Register';
 import SessionConstants from '../../constants/Session';
 import MapConstants from '../../constants/Map';
+
+import Logo from '../../assets/img/logo.svg';
 
 export default () => {
 	const store = useSelector((state) => state.session);
@@ -29,9 +31,9 @@ export default () => {
 				onClick={() => {
 					dispatch(push('/'));
 				}}>
-				<img
+				<Image
 					alt=""
-					src="https://image.flaticon.com/icons/svg/3063/3063822.svg"
+					src={Logo}
 					width="40"
 					height="40"
 					className="d-inline-block align-top"
