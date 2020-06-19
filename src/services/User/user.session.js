@@ -15,6 +15,18 @@ export const getCurrentUser = async (idusuario) => {
 	}
 };
 
+export const editUser = async (user) => {
+	try {
+		const { data } = await Axios.post(
+			'/Usuario/Actualizar',
+			user
+		);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const executeServerPetition = async (method, url, params) => {
 	try {
 		const { data } = await Axios.request({

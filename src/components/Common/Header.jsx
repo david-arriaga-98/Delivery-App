@@ -9,7 +9,7 @@ import Register from '../User/Register';
 import SessionConstants from '../../constants/Session';
 import MapConstants from '../../constants/Map';
 
-import Logo from '../../assets/img/logo.svg';
+import Logo from '../../assets/img/about2.png';
 
 export default () => {
 	const store = useSelector((state) => state.session);
@@ -34,11 +34,10 @@ export default () => {
 				<Image
 					alt=""
 					src={Logo}
-					width="40"
-					height="40"
-					className="d-inline-block align-top"
-				/>{' '}
-				EvoSys
+					width="160"
+					height="70"
+					className="ml-3 d-inline-block align-top"
+				/>
 			</Navbar.Brand>
 
 			<Navbar.Toggle aria-controls="navbar-nav" />

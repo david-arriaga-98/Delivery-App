@@ -3,8 +3,8 @@ import { Pagination, Col } from 'react-bootstrap';
 import ShippingCard from './ShippingCard';
 import { format } from 'date-fns';
 
-const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
-	let totalPages = Math.ceil(data.length / 6);
+const ShippingPaginator = ({ data, dispatch }) => {
+	let totalPages = Math.ceil(data.length / 5);
 	let paginationItems = [];
 
 	const [page, setPage] = useState(1);
@@ -59,6 +59,7 @@ const ShippingPaginator = ({ data, dispatch, renderPaginator }) => {
 						dispatch={dispatch}
 						key={index}
 						position={index}
+						page={page}
 						date={
 							item.esprogramado
 								? format(

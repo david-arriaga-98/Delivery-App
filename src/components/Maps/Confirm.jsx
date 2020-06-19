@@ -9,7 +9,7 @@ import {
 	Button,
 	Spinner,
 	Form,
-	Image
+	InputGroup
 } from 'react-bootstrap';
 import Axios from '../../utils/Axios';
 import { push } from 'connected-react-router';
@@ -24,7 +24,8 @@ const MainComponent = (props) => {
 		horaestimada: '',
 		distancia: '',
 		tiempoespera: '',
-		s_idorden: ''
+		s_idorden: '',
+		tarifa: ''
 	});
 	const [gotData, setGotData] = useState(false);
 	const [respError, setRespError] = useState(false);
@@ -68,7 +69,8 @@ const MainComponent = (props) => {
 						horaestimada: response.data[0].horaestimada,
 						distancia: response.data[0].distancia,
 						tiempoespera: response.data[0].tiempoespera,
-						s_idorden: response.data[0].s_idorden
+						s_idorden: response.data[0].s_idorden,
+						tarifa: response.data[0].tarifa
 					});
 				} catch (error) {
 					setRespError(true);
@@ -166,198 +168,167 @@ const DataComponent = (props) => {
 
 	return (
 		<Row className="justify-content-center">
-			<Col md="7">
-				<FormGroup>
-					<Row>
-						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>
-								Origen:
-							</FormLabel>
-						</Col>
-						<Col md="10">
-							<FormControl
-								readOnly
-								value={origin.direcction}
-							/>
-						</Col>
-					</Row>
-				</FormGroup>
-				<FormGroup>
-					<Row>
-						<Col md="2">
-							<FormLabel style={{ color: 'gray' }}>
-								Destino:
-							</FormLabel>
-						</Col>
-						<Col md="10">
-							<FormControl
-								readOnly
-								value={destiny.direcction}
-							/>
-						</Col>
-					</Row>
-				</FormGroup>
-				<Row className="justify-content-center">
-					<Col md="11" className="px-0">
-						<Image
-							src="https://miro.medium.com/max/1400/1*qYUvh-EtES8dtgKiBRiLsA.png"
-							width="100%"
-							className="order__image"
-							style={{
-								border: '3px solid rgba(0,0,0,.3)',
-								borderRadius: '.5rem'
-							}}
-						/>
-					</Col>
-				</Row>
+			<Col md="12">
+				<InputGroup className="mb-2">
+					<InputGroup.Prepend>
+						<InputGroup.Text className="bg-secondary text-white">
+							Origen
+						</InputGroup.Text>
+					</InputGroup.Prepend>
+					<FormControl readOnly value={origin.direcction} />
+				</InputGroup>
+				<InputGroup className="mb-2">
+					<InputGroup.Prepend>
+						<InputGroup.Text className="bg-secondary text-white">
+							Destino
+						</InputGroup.Text>
+					</InputGroup.Prepend>
+					<FormControl
+						readOnly
+						value={destiny.direcction}
+					/>
+				</InputGroup>
 			</Col>
-			<Col md="5">
+			<Col md="6">
 				<FormGroup>
-					<Row>
-						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Tiempo de espera:
-							</FormLabel>
-						</Col>
-						<Col md="5">
-							<p className="text-success">
-								{`${travelData.tiempoespera} hrs`}
-							</p>
-						</Col>
-					</Row>
+					<FormLabel style={{ color: 'gray' }}>
+						Tiempo de espera:
+					</FormLabel>
+					<FormControl
+						className="bg-secondary text-white"
+						readOnly
+						value={`${travelData.tiempoespera} minutos`}
+					/>
 				</FormGroup>
+			</Col>
+			<Col md="6">
 				<FormGroup>
-					<Row>
-						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Hora estimada:
-							</FormLabel>
-						</Col>
-						<Col md="5">
-							<p className="text-success">
-								{travelData.horaestimada}
-							</p>
-						</Col>
-					</Row>
+					<FormLabel style={{ color: 'gray' }}>
+						Hora estimada:
+					</FormLabel>
+					<FormControl
+						className="bg-secondary text-white"
+						readOnly
+						value={travelData.horaestimada}
+					/>
 				</FormGroup>
-				<FormGroup>
-					<Row>
-						<Col md="7">
-							<FormLabel style={{ color: 'gray' }}>
-								Distancia:
-							</FormLabel>
-						</Col>
-						<Col md="5">
-							<p className="text-success">
-								{`${travelData.distancia} km`}
-							</p>
-						</Col>
-					</Row>
-				</FormGroup>
-				<FormGroup>
-					<Row>
-						<Col md="12">
-							<Form.Check
-								style={{ color: 'gray' }}
-								onChange={() => {
-									setCheck(!check);
-								}}
-								type="checkbox"
-								label="Programar hora de entrega?"
-							/>
-						</Col>
-					</Row>
-				</FormGroup>
+			</Col>
 
+			<Col md="6">
 				<FormGroup>
-					<Row>
-						<Col md="12">
-							<FormLabel style={{ color: 'gray' }}>
-								Fecha programada:
-							</FormLabel>
-						</Col>
-						<Col md="12">
-							<KeyboardDatePicker
-								disabled={!check}
-								value={date}
-								format={'dd-MM-yyyy'}
-								minDate={new Date()}
-								onChange={(date) => {
-									setDate(date);
-								}}
-							/>
-						</Col>
-					</Row>
+					<FormLabel style={{ color: 'gray' }}>
+						Distancia:
+					</FormLabel>
+					<FormControl
+						className="bg-secondary text-white"
+						readOnly
+						value={`${travelData.distancia} km`}
+					/>
 				</FormGroup>
-
+			</Col>
+			<Col md="6">
 				<FormGroup>
-					<Row>
-						<Col md="12">
-							<FormLabel style={{ color: 'gray' }}>
-								Hora programada:
-							</FormLabel>
-						</Col>
-						<Col md="12">
-							<TimePicker
-								disabled={!check}
-								ampm={false}
-								value={hour}
-								onChange={setHour}
-							/>
-						</Col>
-					</Row>
+					<FormLabel style={{ color: 'gray' }}>
+						Tarifa:
+					</FormLabel>
+					<FormControl
+						className="bg-secondary text-white"
+						readOnly
+						value={`${travelData.tarifa} $`}
+					/>
 				</FormGroup>
+			</Col>
+			<Col md="12">
 				<FormGroup>
-					<Row>
-						<Col md="6" className="mt-3 text-center">
+					<Form.Check
+						style={{ color: 'gray' }}
+						onChange={() => {
+							setCheck(!check);
+						}}
+						type="checkbox"
+						label="¿Programar hora de entrega?"
+					/>
+				</FormGroup>
+			</Col>
+			<Col md="6">
+				<FormGroup>
+					<FormLabel style={{ color: 'gray' }}>
+						Fecha programada:
+					</FormLabel>
+					<KeyboardDatePicker
+						disabled={!check}
+						value={date}
+						format={'dd-MM-yyyy'}
+						minDate={new Date()}
+						onChange={(date) => {
+							setDate(date);
+						}}
+					/>
+				</FormGroup>
+			</Col>
+			<Col md="6">
+				<FormGroup>
+					<FormLabel style={{ color: 'gray' }}>
+						Hora programada:
+					</FormLabel>
+					<TimePicker
+						disabled={!check}
+						ampm={false}
+						value={hour}
+						onChange={setHour}
+					/>
+				</FormGroup>
+			</Col>
+			<Col md="10" className="mt-3 text-center">
+				<Row className="justify-content-end">
+					<Col md="6">
+						<Button
+							size="sm"
+							block
+							variant="danger"
+							onClick={() => {
+								dispatch({
+									type:
+										MapConstants.OPEN_CLOSE_CONFIRM_MODAL
+								});
+							}}>
+							Salir
+						</Button>
+					</Col>
+					<Col md="6">
+						{spinner ? (
 							<Button
 								size="sm"
 								block
-								variant="danger"
-								onClick={() => {
-									dispatch({
-										type:
-											MapConstants.OPEN_CLOSE_CONFIRM_MODAL
-									});
-								}}>
-								Salir
+								variant="success"
+								type="submit"
+								disabled>
+								Confirmando
+								<Spinner
+									className="ml-2"
+									as="span"
+									animation="border"
+									size="sm"
+									role="status"
+									aria-hidden="true"
+								/>
 							</Button>
-						</Col>
-						<Col md="6" className="mt-3 text-center">
-							{spinner ? (
-								<Button
-									size="sm"
-									block
-									variant="success"
-									type="submit"
-									disabled>
-									Confirmando
-									<Spinner
-										className="ml-2"
-										as="span"
-										animation="border"
-										size="sm"
-										role="status"
-										aria-hidden="true"
-									/>
-								</Button>
-							) : (
-								<Button
-									size="sm"
-									block
-									variant="success"
-									onClick={handleData}>
-									Confirmar
-								</Button>
-							)}
-						</Col>
-						<Col md="12">
-							<span className="mt-3 text-secondary">
-								{resError}
-							</span>
-						</Col>
-					</Row>
-				</FormGroup>
+						) : (
+							<Button
+								size="sm"
+								block
+								variant="success"
+								onClick={handleData}>
+								Confirmar
+							</Button>
+						)}
+					</Col>
+				</Row>
+			</Col>
+			<Col md="12">
+				<span className="mt-3 text-secondary">
+					{resError}
+				</span>
 			</Col>
 		</Row>
 	);

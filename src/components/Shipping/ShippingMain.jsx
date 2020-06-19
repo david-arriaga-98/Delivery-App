@@ -17,6 +17,7 @@ import Validator from 'validator';
 
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../utils/Axios';
+import { QualifyShipping } from '../../services/Map/shippingService';
 
 import {
 	EstaCargandoLosDatos,
@@ -25,7 +26,13 @@ import {
 
 import ShippingPaginator from './ShippingPaginator';
 
-export default ({ dispatch, orders, helperStore, sessionStore }) => {
+export default ({
+	dispatch,
+	orders,
+	helperStore,
+	sessionStore,
+	reRenderComponent
+}) => {
 	const [orderId, setOrderID] = useState('');
 
 	const [
@@ -44,58 +51,11 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 		setUseDataFromThisComponent
 	] = useState(false);
 
-	// Dates
-	/* const [destFrom, setDestFrom] = useState(null);
-	const [destTo, setDestTo] = useState(null);
-
-	const [orgFrom, setOrgFrom] = useState(null);
-	const [orgTo, setOrgTo] = useState(null); */
 	const [disableInput, setDisableInput] = useState(false);
 
 	const onChange = (e) => {
 		setOrderID(e.target.value);
 	};
-
-	/* const onClickFromModal = async () => {
-		setError('');
-		setCharging(true);
-		setUseDataFromThisComponent(true);
-		dispatch({
-			type: HelperConstants.APPLY_FILTERS_MODAL
-		});
-		try {
-			const dataToSend = {
-				interfaz: 'U',
-				fechadestino_del:
-					destFrom === null
-						? undefined
-						: format(destFrom, 'dd-MM-yyyy'),
-				fechadestino_al:
-					destTo === null
-						? undefined
-						: format(destTo, 'dd-MM-yyyy'),
-				idusuario: sessionStore.data.idusuario,
-				fecharecibido_del:
-					orgFrom === null
-						? undefined
-						: format(orgFrom, 'dd-MM-yyyy'),
-				fecharecibido_al:
-					orgTo === null
-						? undefined
-						: format(orgTo, 'dd-MM-yyyy'),
-				limitederegistros: 0
-			};
-			const { data } = await axios.post(
-				'/Entregas/Listar',
-				dataToSend
-			);
-			setDataFromThisComponent(data.reverse());
-		} catch (error) {
-			setError('Ha ocurrido un error al consultar al servidor');
-		}
-		setIsCharget(true);
-		setCharging(false);
-	}; */
 
 	const onClick = async () => {
 		setError('');
@@ -146,17 +106,29 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 
 	const cancelOrder = async () => {
 		try {
+			let idToSend = undefined;
+			if (useDataFromThisComponent) {
+				idToSend =
+					dataFromThisComponent[
+						helperStore.cancelOrderPosition
+					].idpedido;
+			} else {
+				idToSend =
+					orders[helperStore.cancelOrderPosition].idpedido;
+			}
+
 			await axios.post('/Pedido/Cancelar', {
-				idpedido:
-					orders[helperStore.cancelOrderPosition].idpedido
+				idpedido: idToSend
 			});
-			orders[helperStore.cancelOrderPosition].nombreestado =
-				'Cancelado';
-			orders[helperStore.cancelOrderPosition].color = '#ff7851';
+			reRenderComponent();
+			dispatch({
+				type: HelperConstants.CANCEL_ORDER_MODAL
+			});
+			dispatch({
+				type: HelperConstants.SHOW_SUCCESS_MODAL,
+				payload: 'Tu orden ha sido cancelada correctamente'
+			});
 		} catch (error) {}
-		dispatch({
-			type: HelperConstants.CANCEL_ORDER_MODAL
-		});
 	};
 	const [calify, setCalify] = useState({
 		calificacion: '3',
@@ -170,33 +142,39 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 	};
 
 	const onClickRange = async () => {
-		const obj = {
-			...calify,
-			idpedido: helperStore.qualifyId
-		};
-		obj.calificacion = Number.parseInt(obj.calificacion);
-		dispatch({
-			type: HelperConstants.QUALIFY_MODAL
-		});
-		await axios.post('/Pedido/Calificar', obj);
+		try {
+			const obj = {
+				...calify,
+				idpedido: helperStore.qualifyId,
+				idusuario: sessionStore.data.idusuario
+			};
+			obj.calificacion = Number.parseInt(obj.calificacion);
+
+			await QualifyShipping(obj);
+
+			setCalify({
+				...calify,
+				calificacion: '3',
+				comentarios: ''
+			});
+			dispatch({
+				type: HelperConstants.QUALIFY_MODAL
+			});
+			dispatch({
+				type: HelperConstants.SHOW_SUCCESS_MODAL,
+				payload: 'Calificación ingresada correctamente'
+			});
+		} catch (error) {}
+		// dispatch({
+		// 	type: HelperConstants.QUALIFY_MODAL
+		// });
+		//
 	};
 
 	return (
 		<Fragment>
 			<Col md="9" className="mb-4">
 				<Row className="justify-content-end">
-					{/* <Col>
-						<Button
-							onClick={() => {
-								dispatch({
-									type:
-										HelperConstants.APPLY_FILTERS_MODAL
-								});
-							}}>
-							<i className="fas fa-plus mr-2"></i>
-							Aplicar filtros
-						</Button>
-					</Col> */}
 					<Col md="7">
 						<InputGroup>
 							<FormControl
@@ -265,13 +243,11 @@ export default ({ dispatch, orders, helperStore, sessionStore }) => {
 					<Row className="justify-content-center">
 						<Col md="4">
 							<FormGroup>
-								<FormLabel>
-									Tiempo de espera:
-								</FormLabel>
+								<FormLabel>Espera:</FormLabel>
 								<FormControl
 									className="bg-primary text-white"
 									readOnly
-									value={`${helperStore.orderInfo.tiempoespera} minutos`}
+									value={`${helperStore.orderInfo.tiempoespera} hrs`}
 								/>
 							</FormGroup>
 						</Col>

@@ -116,7 +116,6 @@ export default () => {
 			</Modal>
 
 			<Modal
-				size="lg"
 				show={store.confirmModalState}
 				backdrop="static"
 				onHide={() =>

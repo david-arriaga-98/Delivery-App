@@ -18,13 +18,19 @@ export default () => {
 	const helperStore = useSelector((state) => state.helper);
 	const sessionStore = useSelector((state) => state.session);
 	const dispatch = useDispatch();
-	console.log('ejecutando principal');
 
 	useEffect(() => {
 		if (orders.length === 0 && !gotData && respError === '') {
 			getOrder();
 		}
 	});
+
+	const reRenderComponent = () => {
+		setRespError('');
+		setGotData(false);
+		setOrders([]);
+		getOrder();
+	};
 
 	const getOrder = async () => {
 		try {
@@ -38,7 +44,7 @@ export default () => {
 				dataToSend
 			);
 
-			setOrders(data.reverse());
+			setOrders(data);
 		} catch (error) {
 			setRespError(
 				'Ha ocurrido un error al tratar de recuperar su información'
@@ -58,6 +64,7 @@ export default () => {
 						dispatch={dispatch}
 						helperStore={helperStore}
 						sessionStore={sessionStore}
+						reRenderComponent={reRenderComponent}
 					/>
 				) : (
 					<HuboUnErrorAlObtenerLosDatos />

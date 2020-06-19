@@ -4,6 +4,10 @@ import { Row, Col, Image, Button, Spinner } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import HelperConstants from '../../constants/Helper';
 
+const getIndex = (actualPage, indexInPagination) => {
+	return actualPage * 5 - (5 - indexInPagination);
+};
+
 const InformationButton = ({ dispatch, info }) => (
 	<Button
 		onClick={() => {
@@ -41,21 +45,24 @@ const QualifyButton = ({ dispatch, info }) => (
 	</Button>
 );
 
-const CancelButton = ({ dispatch, position }) => (
-	<Button
-		className="ml-2"
-		onClick={() => {
-			dispatch({
-				type: HelperConstants.CANCEL_ORDER_MODAL,
-				payload: position
-			});
-		}}
-		variant="danger"
-		size="sm">
-		<i className="fas fa-times mr-2"></i>
-		Cancelar tu pedido
-	</Button>
-);
+const CancelButton = ({ dispatch, position, page }) => {
+	const index = getIndex(page, position);
+	return (
+		<Button
+			className="ml-2"
+			onClick={() => {
+				dispatch({
+					type: HelperConstants.CANCEL_ORDER_MODAL,
+					payload: index
+				});
+			}}
+			variant="danger"
+			size="sm">
+			<i className="fas fa-times mr-2"></i>
+			Cancelar tu pedido
+		</Button>
+	);
+};
 
 const ShippingCard = ({
 	date,
@@ -65,7 +72,8 @@ const ShippingCard = ({
 	to,
 	info,
 	dispatch,
-	position
+	position,
+	page
 }) => {
 	let spinn = undefined;
 
@@ -132,6 +140,7 @@ const ShippingCard = ({
 					<CancelButton
 						dispatch={dispatch}
 						position={position}
+						page={page}
 					/>
 				</React.Fragment>
 			);

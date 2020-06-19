@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Route, Switch } from 'react-router';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { ConnectedRouter } from 'connected-react-router';
@@ -8,13 +8,17 @@ import esLocale from 'date-fns/locale/es';
 
 // Components
 import HeaderComponent from './components/Common/Header';
-import HomeComponent from './components/Home';
-import SessionComponent from './components/Session';
-import ShippingComponent from './components/Shipping/Shipping';
-import ProfileComponent from './components/User/Profile';
-import ResponseModalComponent from './components/Responses/Response';
 
+import SessionComponent from './components/Session';
+import ResponseModalComponent from './components/Responses/Response';
 import ImageMain from './assets/img/banner.png';
+const ShippingComponent = lazy(() =>
+	import('./components/Shipping/Shipping')
+);
+const ProfileComponent = lazy(() =>
+	import('./components/User/Profile')
+);
+const HomeComponent = lazy(() => import('./components/Home'));
 
 const Main = () => {
 	return (
@@ -42,37 +46,44 @@ function App({ history, context }) {
 				{/*ROOT*/}
 				<HeaderComponent />
 				<ResponseModalComponent />
-				<Container className="mt-4">
-					<Switch>
-						<Route exact path={'/'} component={Main} />
+				<React.Suspense fallback={<div>Cargando...</div>}>
+					<Container className="mt-4">
+						<Switch>
+							<Route
+								exact
+								path={'/'}
+								component={Main}
+							/>
 
-						<SessionComponent
-							exact
-							path={'/home'}
-							component={HomeComponent}
-						/>
-						<SessionComponent
-							exact
-							path={'/perfil'}
-							component={ProfileComponent}
-						/>
-						<SessionComponent
-							exact
-							path={'/envios'}
-							component={ShippingComponent}
-						/>
+							<SessionComponent
+								exact
+								path={'/home'}
+								component={HomeComponent}
+							/>
 
-						<Route exact path={'*'}>
-							<Row className="justify-content-center">
-								<Col
-									md="12"
-									className="text-danger text-center mt-5">
-									<h1>Esta página no existe</h1>
-								</Col>
-							</Row>
-						</Route>
-					</Switch>
-				</Container>
+							<SessionComponent
+								exact
+								path={'/perfil'}
+								component={ProfileComponent}
+							/>
+							<SessionComponent
+								exact
+								path={'/envios'}
+								component={ShippingComponent}
+							/>
+
+							<Route exact path={'*'}>
+								<Row className="justify-content-center">
+									<Col
+										md="12"
+										className="text-danger text-center mt-5">
+										<h1>Esta página no existe</h1>
+									</Col>
+								</Row>
+							</Route>
+						</Switch>
+					</Container>
+				</React.Suspense>
 			</MuiPickersUtilsProvider>
 		</ConnectedRouter>
 	);
