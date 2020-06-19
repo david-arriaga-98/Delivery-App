@@ -14,7 +14,7 @@ const SearchWithLocale = ({ marker, type, store }) => {
 
 	const handleKeyUp = (e) => {
 		if (e.keyCode === 13) {
-			// dispatchAction();
+			handleClick();
 		}
 	};
 
@@ -135,13 +135,14 @@ const SearchWithLocale = ({ marker, type, store }) => {
 			<Col md="8" className="mt-2">
 				{petitions.charging ? (
 					<Button
-						variant="primary"
+						variant="outline-primary"
 						type="submit"
 						disabled
 						block>
 						Fijando ubicación
 						<Spinner
 							className="ml-2"
+							variant="primary"
 							as="span"
 							animation="border"
 							size="sm"
@@ -151,7 +152,7 @@ const SearchWithLocale = ({ marker, type, store }) => {
 					</Button>
 				) : (
 					<Button
-						variant="primary"
+						variant="outline-primary"
 						type="submit"
 						block
 						onClick={handleClick}>

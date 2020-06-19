@@ -8,10 +8,14 @@ import esLocale from 'date-fns/locale/es';
 
 // Components
 import HeaderComponent from './components/Common/Header';
-
 import SessionComponent from './components/Session';
 import ResponseModalComponent from './components/Responses/Response';
+import ChargingLazy from './components/Common/ChargingLazy';
+import Main from './components/Main';
 import ImageMain from './assets/img/banner.png';
+
+import { useSelector } from 'react-redux';
+
 const ShippingComponent = lazy(() =>
 	import('./components/Shipping/Shipping')
 );
@@ -19,24 +23,9 @@ const ProfileComponent = lazy(() =>
 	import('./components/User/Profile')
 );
 const HomeComponent = lazy(() => import('./components/Home'));
-
-const Main = () => {
-	return (
-		<React.Fragment>
-			<Row className="justify-content-center">
-				<Col md="12" className="text-center">
-					<Image
-						width="100%"
-						height="100%"
-						src={ImageMain}
-					/>
-				</Col>
-			</Row>
-		</React.Fragment>
-	);
-};
-
 function App({ history, context }) {
+	const store = useSelector((state) => state.router);
+
 	return (
 		<ConnectedRouter history={history} context={context}>
 			{/* Picker Provider */}
@@ -45,8 +34,17 @@ function App({ history, context }) {
 				locale={esLocale}>
 				{/*ROOT*/}
 				<HeaderComponent />
+				{store.location.pathname === '/' ? (
+					<Image
+						width="100%"
+						height="100%"
+						src={ImageMain}
+					/>
+				) : (
+					<></>
+				)}
 				<ResponseModalComponent />
-				<React.Suspense fallback={<div>Cargando...</div>}>
+				<React.Suspense fallback={<ChargingLazy />}>
 					<Container className="mt-4">
 						<Switch>
 							<Route

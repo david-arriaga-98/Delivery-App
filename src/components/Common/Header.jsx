@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Navbar, Nav, Image } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,9 +13,7 @@ import Logo from '../../assets/img/about2.png';
 
 export default () => {
 	const store = useSelector((state) => state.session);
-
 	const status = store.isLoggedIn;
-
 	const dispatch = useDispatch();
 
 	const Header = status ? (
@@ -48,7 +46,7 @@ export default () => {
 
 const NotIsLoggedIn = ({ store, dispatch }) => {
 	return (
-		<Fragment>
+		<>
 			<Navbar.Collapse
 				id="navbar-nav"
 				className="justify-content-end ">
@@ -120,7 +118,7 @@ const NotIsLoggedIn = ({ store, dispatch }) => {
 					<Register />
 				</Modal.Body>
 			</Modal>
-		</Fragment>
+		</>
 	);
 };
 

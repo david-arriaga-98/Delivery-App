@@ -23,7 +23,6 @@ const MapContainer = ({ google, type }) => {
 
 	const store = useSelector((state) => state.map);
 
-	// eslint-disable-next-line
 	useEffect(() => {
 		if (type === 'ORIGIN') {
 			if (
@@ -45,7 +44,11 @@ const MapContainer = ({ google, type }) => {
 				setIndication(store.origin.indications);
 				setGotData(true);
 			}
-		} else if (type === 'DESTINY') {
+		}
+	}, [type, store, marker, gotData, indication]);
+
+	useEffect(() => {
+		if (type === 'DESTINY') {
 			if (
 				store.destiny.position.lat !== undefined &&
 				store.destiny.position.lng !== undefined &&
@@ -66,7 +69,7 @@ const MapContainer = ({ google, type }) => {
 				setGotData(true);
 			}
 		}
-	});
+	}, [type, store, marker, gotData, indication]);
 
 	const handleClick = (mapProps, map, clickEvent) => {
 		// Aqui debemos validar que no se salga del rango
@@ -80,7 +83,7 @@ const MapContainer = ({ google, type }) => {
 	// Propiedades del mapa
 	const mapProps = {
 		mapStyle: {
-			border: '3px solid rgba(0,0,0,.3)',
+			border: '2px solid rgba(0,0,0,.3)',
 			borderRadius: '.5rem'
 		},
 		center: {

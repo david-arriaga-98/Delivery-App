@@ -120,7 +120,7 @@ export default ({
 			await axios.post('/Pedido/Cancelar', {
 				idpedido: idToSend
 			});
-			reRenderComponent();
+
 			dispatch({
 				type: HelperConstants.CANCEL_ORDER_MODAL
 			});
@@ -128,6 +128,7 @@ export default ({
 				type: HelperConstants.SHOW_SUCCESS_MODAL,
 				payload: 'Tu orden ha sido cancelada correctamente'
 			});
+			reRenderComponent();
 		} catch (error) {}
 	};
 	const [calify, setCalify] = useState({
@@ -247,7 +248,7 @@ export default ({
 								<FormControl
 									className="bg-primary text-white"
 									readOnly
-									value={`${helperStore.orderInfo.tiempoespera} hrs`}
+									value={`${helperStore.orderInfo.tiempoespera} minutos`}
 								/>
 							</FormGroup>
 						</Col>
@@ -257,7 +258,7 @@ export default ({
 								<FormControl
 									className="bg-primary text-white"
 									readOnly
-									value={`${helperStore.orderInfo.tarifa} $`}
+									value={`${helperStore.orderInfo.tarifa} Q`}
 								/>
 							</FormGroup>
 						</Col>

@@ -37,7 +37,7 @@ const ShippingPaginator = ({ data, dispatch }) => {
 	useEffect(() => {
 		changePage(page);
 	}, [page, data]);
-
+	// eslint-disable-next-line
 	useEffect(() => {
 		setPage(1);
 	}, [data]);

@@ -29,7 +29,6 @@ export default () => {
 		setRespError('');
 		setGotData(false);
 		setOrders([]);
-		getOrder();
 	};
 
 	const getOrder = async () => {
@@ -44,7 +43,7 @@ export default () => {
 				dataToSend
 			);
 
-			setOrders(data);
+			setOrders(data.reverse());
 		} catch (error) {
 			setRespError(
 				'Ha ocurrido un error al tratar de recuperar su información'

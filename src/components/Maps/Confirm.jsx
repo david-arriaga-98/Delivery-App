@@ -150,7 +150,9 @@ const DataComponent = (props) => {
 				horaprogramada: check
 					? format(hour, 'HH:mm:ss')
 					: '00:00:00',
-				esprogramado: check ? 'true' : 'false'
+				esprogramado: check ? 'true' : 'false',
+				instrucciones_recoleccion: origin.indications,
+				instrucciones_entrega: destiny.indications
 			};
 
 			await Axios.post('/Pedido/Insertar', dataToSend);
@@ -169,25 +171,61 @@ const DataComponent = (props) => {
 	return (
 		<Row className="justify-content-center">
 			<Col md="12">
-				<InputGroup className="mb-2">
-					<InputGroup.Prepend>
-						<InputGroup.Text className="bg-secondary text-white">
-							Origen
-						</InputGroup.Text>
-					</InputGroup.Prepend>
-					<FormControl readOnly value={origin.direcction} />
-				</InputGroup>
-				<InputGroup className="mb-2">
-					<InputGroup.Prepend>
-						<InputGroup.Text className="bg-secondary text-white">
-							Destino
-						</InputGroup.Text>
-					</InputGroup.Prepend>
-					<FormControl
-						readOnly
-						value={destiny.direcction}
-					/>
-				</InputGroup>
+				<FormGroup>
+					<FormLabel style={{ color: 'gray' }}>
+						Origen:
+					</FormLabel>
+					<InputGroup className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text className="bg-secondary text-white">
+								Dirección
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<FormControl
+							readOnly
+							value={origin.direcction}
+						/>
+					</InputGroup>
+					<InputGroup className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text className="bg-secondary text-white">
+								Indicación
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<FormControl
+							readOnly
+							value={origin.indications}
+						/>
+					</InputGroup>
+				</FormGroup>
+
+				<FormGroup>
+					<FormLabel style={{ color: 'gray' }}>
+						Destino:
+					</FormLabel>
+					<InputGroup className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text className="bg-secondary text-white">
+								Dirección
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<FormControl
+							readOnly
+							value={destiny.direcction}
+						/>
+					</InputGroup>
+					<InputGroup className="mb-2">
+						<InputGroup.Prepend>
+							<InputGroup.Text className="bg-secondary text-white">
+								Indicación
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<FormControl
+							readOnly
+							value={destiny.indications}
+						/>
+					</InputGroup>
+				</FormGroup>
 			</Col>
 			<Col md="6">
 				<FormGroup>
@@ -234,7 +272,7 @@ const DataComponent = (props) => {
 					<FormControl
 						className="bg-secondary text-white"
 						readOnly
-						value={`${travelData.tarifa} $`}
+						value={`${travelData.tarifa} Q`}
 					/>
 				</FormGroup>
 			</Col>

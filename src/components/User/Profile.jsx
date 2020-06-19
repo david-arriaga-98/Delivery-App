@@ -42,8 +42,8 @@ export default () => {
 	};
 
 	React.useEffect(() => {
-		const execute = async () => {
-			if (!gotData) {
+		if (!gotData) {
+			const execute = async () => {
 				setGotData(true);
 				try {
 					const data = await getCurrentUser(
@@ -62,10 +62,10 @@ export default () => {
 					setError('Ha ocurrido un error');
 				}
 				setCharging(false);
-			}
-		};
-		execute();
-	});
+			};
+			execute();
+		}
+	}, [gotData, user, userState]);
 
 	return (
 		<Row className="justify-content-center mb-4">

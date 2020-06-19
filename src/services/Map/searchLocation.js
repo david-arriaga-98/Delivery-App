@@ -3,8 +3,7 @@ import { Api } from '../../constants/Common';
 
 export const searchByName = async (name) => {
 	try {
-		const newChar = name.replace(' ', '+');
-		const url = `${Api.GEOCODING_URL}address=guatemala,${newChar}&key=${Api.GOOGLE_API_KEY}`;
+		const url = `${Api.GEOCODING_URL}address=${name}&components=country:GT&key=${Api.GOOGLE_API_KEY}`;
 		const { data } = await axios.get(url);
 		return data;
 	} catch (e) {

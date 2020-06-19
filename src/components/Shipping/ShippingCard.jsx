@@ -122,17 +122,17 @@ const ShippingCard = ({
 	const ButtonToRender = () => {
 		if (info.nombreestado === 'Finalizado') {
 			return (
-				<React.Fragment>
+				<>
 					<InformationButton
 						dispatch={dispatch}
 						info={info}
 					/>
 					<QualifyButton dispatch={dispatch} info={info} />
-				</React.Fragment>
+				</>
 			);
 		} else if (info.nombreestado === 'Pendiente') {
 			return (
-				<React.Fragment>
+				<>
 					<InformationButton
 						dispatch={dispatch}
 						info={info}
@@ -142,16 +142,16 @@ const ShippingCard = ({
 						position={position}
 						page={page}
 					/>
-				</React.Fragment>
+				</>
 			);
 		} else {
 			return (
-				<React.Fragment>
+				<>
 					<InformationButton
 						dispatch={dispatch}
 						info={info}
 					/>
-				</React.Fragment>
+				</>
 			);
 		}
 	};

@@ -9,17 +9,15 @@ import {
 import { searchByName } from '../../../services/Map/searchLocation';
 
 const SearchSearch = ({ searchLocale }) => (
-	<InputGroup.Text
-		className="bg-primary put-hand"
-		onClick={searchLocale}>
-		<i className="fas fa-search text-white"></i>
+	<InputGroup.Text className="put-hand" onClick={searchLocale}>
+		<i className="fas fa-search text-black-50"></i>
 	</InputGroup.Text>
 );
 
 const SearchCharging = () => (
-	<InputGroup.Text className="bg-primary put-hand">
+	<InputGroup.Text>
 		<Spinner
-			variant="light"
+			variant="dark"
 			as="span"
 			animation="border"
 			size="sm"
@@ -31,40 +29,46 @@ const SearchCharging = () => (
 
 const SearchWithName = ({ setCenter, center }) => {
 	const [name, setName] = useState('');
-	const [request, setRequest] = useState({
-		error: '',
-		charging: false
-	});
+
+	const [charging, setCharging] = useState(false);
+	const [error, setError] = useState('');
+
+	React.useEffect(() => {
+		const clearError = setTimeout(() => {
+			setError('');
+		}, 2000);
+
+		return () => {
+			clearTimeout(clearError);
+		};
+	}, [error]);
 
 	const handleChange = (e) => {
 		setName(e.target.value);
 	};
+
+	const handleKeyUp = (e) => {
+		if (e.keyCode === 13) {
+			handleClick();
+		}
+	};
+
 	const handleClick = async () => {
 		// Realizamos algunas validaciones
-		setRequest({
-			...request,
-			error: ''
-		});
+		setError('');
 		if (name === '') {
-			setRequest({
-				...request,
-				error: 'Este campo no puede estar vacío'
-			});
+			setError('Este campo no puede estar vacío');
 		} else {
-			setRequest({
-				...request,
-				error: '',
-				charging: true
-			});
+			setCharging(true);
 			// Realizamos la busqueda
 			try {
 				const data = await searchByName(name);
-
-				if (data.status === 'ZERO_RESULTS') {
-					setRequest({
-						...request,
-						error: 'No se ha encontrado esta ubicación'
-					});
+				setCharging(false);
+				if (
+					data.status === 'ZERO_RESULTS' ||
+					data.results.length === 0
+				) {
+					setError('No se ha encontrado esta ubicación');
 				} else {
 					setCenter({
 						...center,
@@ -74,15 +78,8 @@ const SearchWithName = ({ setCenter, center }) => {
 				}
 				setName('');
 			} catch (e) {
-				setRequest({
-					...request,
-					error: 'No se ha encontrado esta ubicación'
-				});
+				setError('No se ha encontrado esta ubicación');
 			}
-			setRequest({
-				...request,
-				charging: false
-			});
 		}
 	};
 
@@ -92,13 +89,15 @@ const SearchWithName = ({ setCenter, center }) => {
 				<InputGroup className="mb-2">
 					<FormControl
 						onChange={handleChange}
-						disabled={request.charging}
+						disabled={charging}
 						type="text"
 						placeholder="Ingrese el lugar a buscar"
 						value={name}
+						isInvalid={!!error}
+						onKeyUp={handleKeyUp}
 					/>
 					<InputGroup.Append>
-						{!request.charging ? (
+						{!charging ? (
 							<SearchSearch
 								searchLocale={handleClick}
 							/>
@@ -106,8 +105,10 @@ const SearchWithName = ({ setCenter, center }) => {
 							<SearchCharging />
 						)}
 					</InputGroup.Append>
+					<FormControl.Feedback type="invalid">
+						{error}
+					</FormControl.Feedback>
 				</InputGroup>
-				<span className="error-message">{request.error}</span>
 			</Col>
 		</Row>
 	);
