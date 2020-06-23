@@ -31,6 +31,10 @@ export const encryptData = (data) => {
 		'RESU',
 		CryptoJS.AES.encrypt(data.usuario, Api.DATA_KEY).toString()
 	);
+	localStorage.setItem(
+		'ZAF',
+		CryptoJS.AES.encrypt(data.interfaz, Api.DATA_KEY).toString()
+	);
 	localStorage.setItem('TIME', getUnixTime(addDays(new Date(), 1)));
 };
 
@@ -39,29 +43,38 @@ export const currentUser = () => {
 	const RESUI = localStorage.getItem('RESUI');
 	const RESU = localStorage.getItem('RESU');
 	const TIME = localStorage.getItem('TIME');
+	const ZAF = localStorage.getItem('ZAF');
 	const CURRENT = getUnixTime(new Date());
 
 	const obj = {
 		token: null,
 		idusuario: null,
-		usuario: null
+		usuario: null,
+		interfaz: null
 	};
 
 	if (
 		NEKOT === null ||
 		RESUI === null ||
 		RESU === null ||
-		TIME === null
+		TIME === null ||
+		ZAF === null
 	) {
 		return obj;
 	} else {
 		const token = decryptData(NEKOT);
 		const idusuario = decryptData(RESUI);
 		const usuario = decryptData(RESU);
+		const interfaz = decryptData(ZAF);
 
 		// Validamos que el tiempo sea correcto
 		if (CURRENT < TIME) {
-			if (token !== '' && idusuario !== '' && usuario !== '') {
+			if (
+				token !== '' &&
+				idusuario !== '' &&
+				usuario !== '' &&
+				interfaz !== ''
+			) {
 				// Validamos que los datos sean correctos
 
 				if (
@@ -71,6 +84,7 @@ export const currentUser = () => {
 					obj.token = token;
 					obj.idusuario = idusuario;
 					obj.usuario = usuario;
+					obj.interfaz = interfaz;
 				}
 			}
 		}
@@ -89,4 +103,5 @@ export const logOut = () => {
 	localStorage.removeItem('RESUI');
 	localStorage.removeItem('RESU');
 	localStorage.removeItem('TIME');
+	localStorage.removeItem('ZAF');
 };

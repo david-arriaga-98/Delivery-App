@@ -1,0 +1,38 @@
+.wrapper {
+	overflow-x: hidden;
+	.toggled {
+		.sidebar-wrapper {
+			margin-left: 0;
+		}
+	}
+}
+
+.sidebar-wrapper {
+	min-height: 100vh;
+	margin-left: -15rem;
+	transition: margin 0.25s ease-out;
+	border-right: 1px solid rgba(0, 0, 0, 0.3);
+
+	.list-group {
+		width: 15rem;
+	}
+}
+
+#page-content-wrapper {
+	min-width: 100vw;
+}
+
+@media (min-width: 768px) {
+	.sidebar-wrapper {
+		margin-left: 0;
+	}
+
+	#page-content-wrapper {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.wrapper.toggled .sidebar-wrapper {
+		margin-left: -15rem;
+	}
+}

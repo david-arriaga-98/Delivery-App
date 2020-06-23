@@ -17,7 +17,11 @@ export default () => {
 	const dispatch = useDispatch();
 
 	const Header = status ? (
-		<IsLoggedIn dispatch={dispatch} />
+		store.data.interfaz === 'A' ? (
+			<IsAdmin dispatch={dispatch} />
+		) : (
+			<IsLoggedIn dispatch={dispatch} />
+		)
 	) : (
 		<NotIsLoggedIn store={store} dispatch={dispatch} />
 	);
@@ -41,6 +45,43 @@ export default () => {
 			<Navbar.Toggle aria-controls="navbar-nav" />
 			{Header}
 		</Navbar>
+	);
+};
+
+const IsAdmin = ({ dispatch }) => {
+	return (
+		<>
+			<Navbar.Collapse
+				id="navbar-nav"
+				className="justify-content-end ">
+				<Nav>
+					<Nav.Item>
+						<span
+							className="navbar__item mr-3 mt-1"
+							onClick={() => {
+								dispatch(push('/admin/v'));
+							}}>
+							Panel
+						</span>
+					</Nav.Item>
+					<Nav.Item>
+						<span
+							onClick={() => {
+								dispatch({
+									type: SessionConstants.LOG_OUT
+								});
+								dispatch({
+									type:
+										MapConstants.RESTART_MAP_STATE
+								});
+							}}
+							className="navbar__item mr-3 mt-1">
+							Salir
+						</span>
+					</Nav.Item>
+				</Nav>
+			</Navbar.Collapse>
+		</>
 	);
 };
 

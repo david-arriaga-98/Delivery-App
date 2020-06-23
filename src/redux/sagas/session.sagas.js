@@ -23,14 +23,19 @@ function* login({ payload }) {
 		const sendPayload = {
 			token: results.token,
 			idusuario: results.idusuario,
-			usuario: results.usuario
+			usuario: results.usuario,
+			interfaz: results.interfaz
 		};
 		encryptData(sendPayload);
 		yield put({
 			type: sessionConstants.SUCCESS_LOGIN,
 			payload: sendPayload
 		});
-		yield put(push('/home'));
+		if (results.interfaz === 'A') {
+			yield put(push('/admin/v'));
+		} else {
+			yield put(push('/home'));
+		}
 	} catch (error) {
 		if (error.response !== undefined) {
 			if (

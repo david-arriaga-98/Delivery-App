@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import { Route, Switch } from 'react-router';
-import { Container, Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Image } from 'react-bootstrap';
 import { ConnectedRouter } from 'connected-react-router';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -45,42 +45,44 @@ function App({ history, context }) {
 				)}
 				<ResponseModalComponent />
 				<React.Suspense fallback={<ChargingLazy />}>
-					<Container className="mt-4">
-						<Switch>
-							<Route
-								exact
-								path={'/'}
-								component={Main}
-							/>
+					<Switch>
+						<Route exact path={'/'} component={Main} />
 
-							<SessionComponent
-								exact
-								path={'/home'}
-								component={HomeComponent}
-							/>
+						<SessionComponent
+							exact
+							path={'/home'}
+							component={HomeComponent}
+							interf={'U'}
+						/>
 
-							<SessionComponent
-								exact
-								path={'/perfil'}
-								component={ProfileComponent}
-							/>
-							<SessionComponent
-								exact
-								path={'/envios'}
-								component={ShippingComponent}
-							/>
-
-							<Route exact path={'*'}>
-								<Row className="justify-content-center">
-									<Col
-										md="12"
-										className="text-danger text-center mt-5">
-										<h1>Esta página no existe</h1>
-									</Col>
-								</Row>
-							</Route>
-						</Switch>
-					</Container>
+						<SessionComponent
+							exact
+							path={'/perfil'}
+							component={ProfileComponent}
+							interf={'U'}
+						/>
+						<SessionComponent
+							exact
+							path={'/envios'}
+							component={ShippingComponent}
+							interf={'U'}
+						/>
+						<SessionComponent
+							exact
+							path={'/admin/v'}
+							component={HomeComponent}
+							interf={'A'}
+						/>
+						<Route exact path={'*'}>
+							<Row className="justify-content-center">
+								<Col
+									md="12"
+									className="text-danger text-center mt-5">
+									<h1>Esta página no existe</h1>
+								</Col>
+							</Row>
+						</Route>
+					</Switch>
 				</React.Suspense>
 			</MuiPickersUtilsProvider>
 		</ConnectedRouter>

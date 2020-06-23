@@ -6,7 +6,7 @@ export default () => {
 	React.useEffect(() => {
 		setTimeout(() => {
 			setShow(true);
-		}, 1000);
+		}, 800);
 	});
 
 	return (
