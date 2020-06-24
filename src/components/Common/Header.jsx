@@ -59,7 +59,7 @@ const IsAdmin = ({ dispatch }) => {
 						<span
 							className="navbar__item mr-3 mt-1"
 							onClick={() => {
-								dispatch(push('/admin/v'));
+								dispatch(push('/admin'));
 							}}>
 							Panel
 						</span>

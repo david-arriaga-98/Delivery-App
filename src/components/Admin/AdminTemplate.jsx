@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
 
 const AdminTemplate = ({ XComponent }) => {
 	const [showModal, setShowModal] = useState(true);
-
+	const dispatch = useDispatch();
 	const handle = () => {
 		setShowModal(!showModal);
 	};
@@ -17,13 +19,29 @@ const AdminTemplate = ({ XComponent }) => {
 			}>
 			<div className="sidebar-wrapper">
 				<div className="list-group list-group-flush">
-					<span className="list-group-item list-group-item-action put-hand">
+					<span
+						className="list-group-item list-group-item-action put-hand"
+						onClick={() => {
+							dispatch(push('/admin'));
+						}}>
 						<i className="fas fa-home mr-2"></i>
 						Home
 					</span>
-					<span className="list-group-item list-group-item-action put-hand">
+					<span
+						className="list-group-item list-group-item-action put-hand"
+						onClick={() => {
+							dispatch(push('/admin/pedidos'));
+						}}>
 						<i className="fas fa-truck mr-2"></i>
 						Pedidos
+					</span>
+					<span
+						className="list-group-item list-group-item-action put-hand"
+						onClick={() => {
+							dispatch(push('/admin/pedidos'));
+						}}>
+						<i className="fas fa-motorcycle mr-2"></i>
+						Repartidor
 					</span>
 				</div>
 			</div>

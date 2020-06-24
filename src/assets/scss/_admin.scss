@@ -18,6 +18,14 @@
 	}
 }
 
+.form-control:focus {
+	color: #5a5a5a;
+	background-color: #fff;
+	border-color: #d0eae2;
+	outline: 0;
+	box-shadow: 0 0 0 0.2rem rgba(120, 194, 173, 0.25);
+}
+
 #page-content-wrapper {
 	min-width: 100vw;
 }

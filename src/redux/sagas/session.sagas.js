@@ -32,7 +32,7 @@ function* login({ payload }) {
 			payload: sendPayload
 		});
 		if (results.interfaz === 'A') {
-			yield put(push('/admin/v'));
+			yield put(push('/admin'));
 		} else {
 			yield put(push('/home'));
 		}

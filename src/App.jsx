@@ -13,6 +13,10 @@ import ResponseModalComponent from './components/Responses/Response';
 import ChargingLazy from './components/Common/ChargingLazy';
 import Main from './components/Main';
 import ImageMain from './assets/img/banner.png';
+import AdminHome from './components/Admin/Home';
+
+// Admin Components
+import OrderComponent from './components/Admin/Order';
 
 import { useSelector } from 'react-redux';
 
@@ -69,8 +73,14 @@ function App({ history, context }) {
 						/>
 						<SessionComponent
 							exact
-							path={'/admin/v'}
-							component={HomeComponent}
+							path={'/admin'}
+							component={AdminHome}
+							interf={'A'}
+						/>
+						<SessionComponent
+							exact
+							path={'/admin/pedidos'}
+							component={OrderComponent}
 							interf={'A'}
 						/>
 						<Route exact path={'*'}>
