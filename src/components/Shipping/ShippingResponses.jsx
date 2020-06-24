@@ -15,9 +15,6 @@ export const HuboUnErrorAlObtenerLosDatos = () => {
 export const EstaCargandoLosDatos = () => {
 	return (
 		<Col md="9" className="mt-4 text-center">
-			<h5 className="text-success">
-				Espere... Estamos obteniendo sus datos del servidor
-			</h5>
 			<Spinner
 				className="ml-2"
 				as="span"
@@ -30,22 +27,13 @@ export const EstaCargandoLosDatos = () => {
 	);
 };
 
-export const NoHayDatos = ({ action }) => {
+export const NoHayDatos = () => {
 	return (
 		<Row className="justify-content-center">
-			<Col md="9" className="mt-4 text-center">
-				<h5 className="text-dark">
+			<Col className="mt-4 text-center">
+				<h5 className="text-secondary">
 					No hay datos para mostrar
 				</h5>
-			</Col>
-			<Col md="9" className="mt-2 text-center">
-				<Button
-					size="sm"
-					variant="secondary"
-					onClick={action}>
-					Volver
-					<i className="fas fa-undo-alt ml-2"></i>
-				</Button>
 			</Col>
 		</Row>
 	);
