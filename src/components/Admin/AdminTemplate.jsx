@@ -43,6 +43,14 @@ const AdminTemplate = ({ XComponent }) => {
 						<i className="fas fa-motorcycle mr-2"></i>
 						Repartidor
 					</span>
+					<span
+						className="list-group-item list-group-item-action put-hand"
+						onClick={() => {
+							dispatch(push('/admin/perfil'));
+						}}>
+						<i className="fas fa-id-badge mr-2"></i>
+						Perfil
+					</span>
 				</div>
 			</div>
 

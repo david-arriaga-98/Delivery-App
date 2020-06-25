@@ -83,6 +83,12 @@ function App({ history, context }) {
 							component={OrderComponent}
 							interf={'A'}
 						/>
+						<SessionComponent
+							exact
+							path={'/admin/perfil'}
+							component={ProfileComponent}
+							interf={'A'}
+						/>
 						<Route exact path={'*'}>
 							<Row className="justify-content-center">
 								<Col

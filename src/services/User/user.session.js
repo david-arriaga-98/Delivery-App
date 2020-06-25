@@ -27,6 +27,18 @@ export const editUser = async (user) => {
 	}
 };
 
+export const editPassword = async (params) => {
+	try {
+		const { data } = await Axios.post(
+			'/Usuario/Actualizar_Contrasena',
+			params
+		);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const executeServerPetition = async (method, url, params) => {
 	try {
 		const { data } = await Axios.request({
