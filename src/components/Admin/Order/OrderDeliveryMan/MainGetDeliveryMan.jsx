@@ -39,8 +39,16 @@ const MainGetDeliveryMan = ({
 				data={data}
 				fields={[
 					'Buscar por...',
-					'Nombres~nombres',
-					'Apellidos~apellidos'
+					'Nombres',
+					'Apellidos',
+					'Usuario',
+					'N° de Viajes'
+				]}
+				fieldsToSearch={[
+					'nombres',
+					'apellidos',
+					'usuario',
+					'viajes'
 				]}
 				setSearchData={setSearchData}
 				setUseSearch={setUseSearch}
@@ -51,7 +59,7 @@ const MainGetDeliveryMan = ({
 				) : (
 					<>
 						<GetDeliveryManTable
-							data={searchData}
+							data={pData}
 							setDeliveryMan={setDeliveryMan}
 							charging={charging}
 						/>

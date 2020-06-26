@@ -17,8 +17,9 @@ import AdminHome from './components/Admin/Home';
 
 // Admin Components
 import OrderComponent from './components/Admin/Order';
+import DeliveryManComponent from './components/Admin/DeliveryMan';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const ShippingComponent = lazy(() =>
 	import('./components/Shipping/Shipping')
@@ -29,17 +30,6 @@ const ProfileComponent = lazy(() =>
 const HomeComponent = lazy(() => import('./components/Home'));
 function App({ history, context }) {
 	const store = useSelector((state) => state.router);
-	const dispatch = useDispatch();
-
-	React.useEffect(() => {
-		dispatch({
-			type: 'START_GET_ORDERS',
-			payload: {
-				interfaz: 'A',
-				limitederegistros: 0
-			}
-		});
-	}, []);
 
 	return (
 		<ConnectedRouter history={history} context={context}>
@@ -92,6 +82,12 @@ function App({ history, context }) {
 							exact
 							path={'/admin/pedidos'}
 							component={OrderComponent}
+							interf={'A'}
+						/>
+						<SessionComponent
+							exact
+							path={'/admin/repartidores'}
+							component={DeliveryManComponent}
 							interf={'A'}
 						/>
 						<SessionComponent

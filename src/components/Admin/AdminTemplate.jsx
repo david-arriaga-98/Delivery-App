@@ -38,7 +38,7 @@ const AdminTemplate = ({ XComponent }) => {
 					<span
 						className="list-group-item list-group-item-action put-hand"
 						onClick={() => {
-							dispatch(push('/admin/pedidos'));
+							dispatch(push('/admin/repartidores'));
 						}}>
 						<i className="fas fa-motorcycle mr-2"></i>
 						Repartidor

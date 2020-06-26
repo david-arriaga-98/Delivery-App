@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Col, Pagination } from 'react-bootstrap';
-import Paginator from '../../utils/Paginator';
 
 const GetDeliveryManPaginator = ({
 	data,
@@ -10,18 +9,24 @@ const GetDeliveryManPaginator = ({
 	page,
 	setPage
 }) => {
-	const [totalPage, setTotalPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
 
-	const paginator = new Paginator(data, range);
+	const getRangeOfData = (page) => {
+		let max = page * range - 1;
+		let min = max - (range - 1);
+		return {
+			min,
+			max
+		};
+	};
 
-	React.useEffect(() => {
-		setTotalPage(paginator.getTotalPages());
-	}, [page, data]);
-
-	React.useEffect(() => {
-		changePage();
-	}, [page, data]);
-
+	const getDataForPage = (page) => {
+		const range = getRangeOfData(page);
+		return data.filter(
+			(item, index) => index >= range.min && index <= range.max
+		);
+	};
+	// eslint-disable-next-line
 	const changePage = (
 		previous = false,
 		next = false,
@@ -33,23 +38,33 @@ const GetDeliveryManPaginator = ({
 				setPage(page - 1);
 			}
 		} else if (next) {
-			if (page !== totalPage) {
+			if (page !== totalPages) {
 				setPage(page + 1);
 			}
 		} else if (before) {
 			setPage(1);
 		} else if (after) {
-			setPage(totalPage);
+			setPage(totalPages);
 		}
-		setPData(paginator.getDataForPage(page));
+		setPData(getDataForPage(page));
 	};
+
+	React.useEffect(() => {
+		setPage(1);
+	}, [data, setPage]);
+
+	React.useEffect(() => {
+		setTotalPages(Math.ceil(data.length / range));
+	}, [data, range]);
+
+	React.useEffect(() => {
+		changePage();
+	}, [page, data, totalPages, changePage]);
 
 	return (
 		<>
 			<Col md="9">
-				<p className="text-black-50">{`Existen ${
-					data.length
-				} ${context} y ${paginator.getTotalPages()} páginas en total`}</p>
+				<p className="text-black-50">{`Existen ${data.length} ${context} y ${totalPages}  páginas en total`}</p>
 			</Col>
 			<Col md="3">
 				<Pagination size="sm" style={{ paddingRight: '0' }}>
@@ -80,4 +95,4 @@ const GetDeliveryManPaginator = ({
 	);
 };
 
-export default GetDeliveryManPaginator;
+export default React.memo(GetDeliveryManPaginator);

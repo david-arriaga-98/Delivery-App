@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 
-import OrderTable from './OrderTable';
-import OrderDeliveryMan from './OrderDeliveryMan';
-
 import PaginationComponent from '../../Common/Pagination';
 import Search from '../../Common/Search';
 import { NoHayDatos } from '../../Shipping/ShippingResponses';
+import DeliveryManTable from './DeliveryManTable';
 
-const OrderPagination = ({ data }) => {
+const DeliveryManPagination = ({ data }) => {
 	const [modal, setModal] = useState(false);
 	const [dataInfo, setDataInfo] = useState(0);
 
@@ -45,7 +43,7 @@ const OrderPagination = ({ data }) => {
 					<NoHayDatos />
 				) : (
 					<>
-						<OrderTable
+						<DeliveryManTable
 							pData={pData}
 							page={page}
 							setDataInfo={setDataInfo}
@@ -64,7 +62,7 @@ const OrderPagination = ({ data }) => {
 				)
 			) : (
 				<>
-					<OrderTable
+					<DeliveryManTable
 						pData={pData}
 						page={page}
 						setDataInfo={setDataInfo}
@@ -81,13 +79,8 @@ const OrderPagination = ({ data }) => {
 					/>
 				</>
 			)}
-			<OrderDeliveryMan
-				modal={modal}
-				setModal={setModal}
-				dataInfo={data[dataInfo]}
-			/>
 		</>
 	);
 };
 
-export default OrderPagination;
+export default DeliveryManPagination;

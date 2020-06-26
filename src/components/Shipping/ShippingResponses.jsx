@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Row, Col, Spinner } from 'react-bootstrap';
 
 export const HuboUnErrorAlObtenerLosDatos = () => {
 	return (
