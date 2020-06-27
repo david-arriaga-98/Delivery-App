@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import { Modal, Button, Spinner } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { terminateOrder } from '../../services/Admin/orderService';
+import { useSelector, useDispatch } from 'react-redux';
 import HelperConstants from '../../constants/Helper';
-import axios from '../../utils/Axios';
 
-const CancelOrder = ({ data, setLoadData }) => {
-	const dispatch = useDispatch();
-	const helperStore = useSelector((state) => state.helper);
+const TerminateOrder = ({ modal, setModal, data, setLoadData }) => {
+	const idusuario = useSelector(
+		(state) => state.session.data.idusuario
+	);
 	const [charging, setCharging] = useState(false);
-
-	const cancelOrder = async () => {
+	const dispatch = useDispatch();
+	const terminate = async () => {
 		try {
 			setCharging(true);
-			await axios.post('/Pedido/Cancelar', {
-				idpedido: data
-			});
-
-			dispatch({
-				type: HelperConstants.CANCEL_ORDER_MODAL
-			});
+			await terminateOrder(idusuario, data.idpedido);
+			setModal(false);
 			dispatch({
 				type: HelperConstants.SHOW_SUCCESS_MODAL,
-				payload: 'La orden ha sido cancelada correctamente'
+				payload: 'La orden ha sido terminada'
 			});
 			setLoadData(true);
 		} catch (error) {}
@@ -29,14 +25,7 @@ const CancelOrder = ({ data, setLoadData }) => {
 	};
 
 	return (
-		<Modal
-			scrollable
-			onHide={() =>
-				dispatch({
-					type: HelperConstants.CANCEL_ORDER_MODAL
-				})
-			}
-			show={helperStore.cancelOrderModal}>
+		<Modal scrollable onHide={() => setModal(false)} show={modal}>
 			<Modal.Header closeButton>
 				<Modal.Title>
 					<i className="fas fa-info-circle mr-2"></i>
@@ -45,7 +34,7 @@ const CancelOrder = ({ data, setLoadData }) => {
 			</Modal.Header>
 			<Modal.Body className="text-center">
 				<p className="text-black-50">
-					¿Seguro que deseas cancelar tu pedido?
+					¿Seguro que deseas terminar esta entrega?
 				</p>
 			</Modal.Body>
 			<Modal.Footer>
@@ -65,7 +54,7 @@ const CancelOrder = ({ data, setLoadData }) => {
 					<Button
 						variant="primary"
 						size="sm"
-						onClick={cancelOrder}>
+						onClick={terminate}>
 						<span>
 							<i className="fas fa-check mr-2"></i>
 						</span>
@@ -76,9 +65,7 @@ const CancelOrder = ({ data, setLoadData }) => {
 				<Button
 					className="ml-2"
 					onClick={() => {
-						dispatch({
-							type: HelperConstants.CANCEL_ORDER_MODAL
-						});
+						setModal(false);
 					}}
 					variant="danger"
 					size="sm">
@@ -90,4 +77,4 @@ const CancelOrder = ({ data, setLoadData }) => {
 	);
 };
 
-export default React.memo(CancelOrder);
+export default TerminateOrder;

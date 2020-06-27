@@ -117,7 +117,9 @@ export default () => {
 
 			<Modal
 				show={store.confirmModalState}
+				size="xl"
 				backdrop="static"
+				scrollable
 				onHide={() =>
 					dispatch({
 						type: MapConstants.OPEN_CLOSE_CONFIRM_MODAL

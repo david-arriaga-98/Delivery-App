@@ -12,6 +12,18 @@ export const getOrders = async () => {
 	}
 };
 
+export const terminateOrder = async (idusuario, idpedido) => {
+	try {
+		const { data } = await Axios.post('/Pedido/Finalizar', {
+			idusuario,
+			idpedido
+		});
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
+
 export const getDelivery = async (idusuario) => {
 	try {
 		const { data } = await Axios.post('/Repartidor/Listado', {

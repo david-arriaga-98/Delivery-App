@@ -20,8 +20,11 @@ const MainGetDeliveryMan = ({
 	const [searchData, setSearchData] = useState([]);
 	const [useSearch, setUseSearch] = useState(false);
 
+	const [range, setRange] = useState(10);
+
 	const setDeliveryMan = async (idusuariorepartidor) => {
 		setCharging(true);
+
 		try {
 			await setDelivery(
 				dataInfo.idpedido,
@@ -67,9 +70,10 @@ const MainGetDeliveryMan = ({
 							data={searchData}
 							setPData={setPData}
 							context={'repartidores'}
-							range={5}
 							page={page}
 							setPage={setPage}
+							range={range}
+							setRange={setRange}
 						/>
 					</>
 				)
@@ -84,9 +88,10 @@ const MainGetDeliveryMan = ({
 						data={data}
 						setPData={setPData}
 						context={'repartidores'}
-						range={5}
 						page={page}
 						setPage={setPage}
+						range={range}
+						setRange={setRange}
 					/>
 				</>
 			)}

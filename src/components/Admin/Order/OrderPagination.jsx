@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
 import OrderTable from './OrderTable';
-import OrderDeliveryMan from './OrderDeliveryMan';
 
 import PaginationComponent from '../../Common/Pagination';
 import Search from '../../Common/Search';
 import { NoHayDatos } from '../../Shipping/ShippingResponses';
 
-const OrderPagination = ({ data }) => {
+const OrderPagination = ({ data, setLoadData }) => {
 	const [modal, setModal] = useState(false);
 	const [dataInfo, setDataInfo] = useState(0);
 
 	// Paginación
 	const [page, setPage] = useState(1);
 	const [pData, setPData] = useState([]);
+	const [range, setRange] = useState(10);
 
 	// Search
 	const [searchData, setSearchData] = useState([]);
@@ -50,15 +50,18 @@ const OrderPagination = ({ data }) => {
 							page={page}
 							setDataInfo={setDataInfo}
 							setModal={setModal}
+							range={range}
+							setLoadData={setLoadData}
 						/>
 
 						<PaginationComponent
 							data={searchData}
 							setPData={setPData}
 							context={'pedidos'}
-							range={10}
 							page={page}
 							setPage={setPage}
+							range={range}
+							setRange={setRange}
 						/>
 					</>
 				)
@@ -69,23 +72,21 @@ const OrderPagination = ({ data }) => {
 						page={page}
 						setDataInfo={setDataInfo}
 						setModal={setModal}
+						range={range}
+						setLoadData={setLoadData}
 					/>
 
 					<PaginationComponent
 						data={data}
 						setPData={setPData}
 						context={'pedidos'}
-						range={10}
 						page={page}
 						setPage={setPage}
+						range={range}
+						setRange={setRange}
 					/>
 				</>
 			)}
-			<OrderDeliveryMan
-				modal={modal}
-				setModal={setModal}
-				dataInfo={data[dataInfo]}
-			/>
 		</>
 	);
 };

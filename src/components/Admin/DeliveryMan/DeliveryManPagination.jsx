@@ -6,12 +6,10 @@ import { NoHayDatos } from '../../Shipping/ShippingResponses';
 import DeliveryManTable from './DeliveryManTable';
 
 const DeliveryManPagination = ({ data }) => {
-	const [modal, setModal] = useState(false);
-	const [dataInfo, setDataInfo] = useState(0);
-
 	// Paginación
 	const [page, setPage] = useState(1);
 	const [pData, setPData] = useState([]);
+	const [range, setRange] = useState(10);
 
 	// Search
 	const [searchData, setSearchData] = useState([]);
@@ -23,16 +21,16 @@ const DeliveryManPagination = ({ data }) => {
 				data={data}
 				fields={[
 					'Buscar por...',
-					'ID Orden',
-					'ID Pedido',
-					'Estado',
-					'Usuario'
+					'Nombres',
+					'Apellidos',
+					'Usuario',
+					'N° de Viajes'
 				]}
 				fieldsToSearch={[
-					'idorden',
-					'idpedido',
-					'nombreestado',
-					'usuario'
+					'nombres',
+					'apellidos',
+					'usuario',
+					'viajes'
 				]}
 				setSearchData={setSearchData}
 				setUseSearch={setUseSearch}
@@ -43,18 +41,14 @@ const DeliveryManPagination = ({ data }) => {
 					<NoHayDatos />
 				) : (
 					<>
-						<DeliveryManTable
-							pData={pData}
-							page={page}
-							setDataInfo={setDataInfo}
-							setModal={setModal}
-						/>
+						<DeliveryManTable pData={pData} page={page} />
 
 						<PaginationComponent
 							data={searchData}
 							setPData={setPData}
 							context={'pedidos'}
-							range={10}
+							range={range}
+							setRange={setRange}
 							page={page}
 							setPage={setPage}
 						/>
@@ -62,18 +56,14 @@ const DeliveryManPagination = ({ data }) => {
 				)
 			) : (
 				<>
-					<DeliveryManTable
-						pData={pData}
-						page={page}
-						setDataInfo={setDataInfo}
-						setModal={setModal}
-					/>
+					<DeliveryManTable pData={pData} page={page} />
 
 					<PaginationComponent
 						data={data}
 						setPData={setPData}
 						context={'pedidos'}
-						range={10}
+						range={range}
+						setRange={setRange}
 						page={page}
 						setPage={setPage}
 					/>

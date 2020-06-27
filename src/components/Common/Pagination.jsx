@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
-import { Col, Pagination } from 'react-bootstrap';
+import {
+	Col,
+	Pagination,
+	FormControl,
+	FormLabel
+} from 'react-bootstrap';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+	customSelect: {
+		width: 'auto',
+		display: 'inline-block',
+		height: 'calc(1.5em + .5rem + 2px)',
+		fontSize: '.875rem',
+		marginLeft: '.2rem'
+	}
+});
 
 const GetDeliveryManPaginator = ({
 	data,
 	context,
 	setPData,
-	range,
 	page,
-	setPage
+	setPage,
+	range,
+	setRange
 }) => {
 	const [totalPages, setTotalPages] = useState(0);
+	const classes = useStyles();
 
 	const getRangeOfData = (page) => {
 		let max = page * range - 1;
@@ -18,6 +36,10 @@ const GetDeliveryManPaginator = ({
 			min,
 			max
 		};
+	};
+
+	const handleChange = (e) => {
+		setRange(Number.parseInt(e.target.value));
 	};
 
 	const getDataForPage = (page) => {
@@ -63,8 +85,23 @@ const GetDeliveryManPaginator = ({
 
 	return (
 		<>
-			<Col md="9">
+			<Col md="6">
 				<p className="text-black-50">{`Existen ${data.length} ${context} y ${totalPages}  páginas en total`}</p>
+			</Col>
+			<Col md="3">
+				<FormLabel htmlFor="total" className="text-black-50">
+					Ver
+				</FormLabel>
+				<FormControl
+					id="total"
+					as="select"
+					className={classes.customSelect}
+					onClick={handleChange}>
+					<option>10</option>
+					<option>20</option>
+					<option>50</option>
+					<option>100</option>
+				</FormControl>
 			</Col>
 			<Col md="3">
 				<Pagination size="sm" style={{ paddingRight: '0' }}>

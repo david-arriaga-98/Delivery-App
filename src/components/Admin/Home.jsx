@@ -56,9 +56,12 @@ const AdminHome = () => {
 							</Card>
 						</Col>
 						<Col md="3" className="text-center ">
-							<Card bg="danger" className="mt-2">
+							<Card
+								border="danger"
+								text={'dark'}
+								className="mt-2">
 								<Card.Title
-									className="mt-2 text-white"
+									className="mt-2"
 									style={{ fontSize: '14px' }}>
 									Ventas
 								</Card.Title>

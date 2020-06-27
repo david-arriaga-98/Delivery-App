@@ -1,13 +1,10 @@
 import React from 'react';
 import { Table, Col } from 'react-bootstrap';
-import { format } from 'date-fns';
-import { useDispatch } from 'react-redux';
-import HelperConstants from '../../../constants/Helper';
 
 import OrderInformation from '../../Order/OrderInformation';
 import CancelOrder from '../../Order/CancelOrder';
 
-const OrderTable = ({ pData, page, setDataInfo, setModal }) => {
+const OrderTable = ({ pData, page }) => {
 	return (
 		<>
 			<Col md="12" className="mt-2">
@@ -72,66 +69,6 @@ const OrderTable = ({ pData, page, setDataInfo, setModal }) => {
 			<OrderInformation />
 			<CancelOrder />
 		</>
-	);
-};
-
-const BtnCancel = ({ pData, index }) => {
-	const dispatch = useDispatch();
-	return (
-		<div
-			onClick={() => {
-				dispatch({
-					type: HelperConstants.ORDER_INFORMATION_MODAL,
-					payload: {
-						state: true,
-						info: pData[index]
-					}
-				});
-			}}>
-			<i className="fas fa-eye text-success put-hand"></i>
-		</div>
-	);
-};
-
-const BtnPending = ({
-	setModal,
-	setDataInfo,
-	page,
-	index,
-	pData
-}) => {
-	const dispatch = useDispatch();
-
-	return (
-		<div>
-			<span
-				onClick={() => {
-					dispatch({
-						type: HelperConstants.ORDER_INFORMATION_MODAL,
-						payload: {
-							state: true,
-							info: pData[index]
-						}
-					});
-				}}>
-				<i className="fas fa-eye text-success put-hand"></i>
-			</span>
-			<span
-				onClick={() => {
-					dispatch({
-						type: HelperConstants.CANCEL_ORDER_MODAL
-					});
-				}}>
-				<i className="fas fa-times-circle ml-2 text-danger put-hand"></i>
-			</span>
-			<span
-				onClick={() => {
-					setDataInfo(page * 10 - (10 - index));
-					setModal(true);
-				}}>
-				<i className="fas fa-user-plus ml-2 text-primary put-hand"></i>
-			</span>
-		</div>
 	);
 };
 

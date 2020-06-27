@@ -12,19 +12,25 @@ const Index = () => {
 	const [data, setData] = useState([]);
 	const [charging, setCharging] = useState(true);
 	const [error, setError] = useState(false);
+	const [loadData, setLoadData] = useState(true);
 
 	React.useEffect(() => {
 		const exectAction = async () => {
-			try {
-				const rData = await getOrders();
-				setData(rData);
-			} catch (error) {
-				setError(true);
+			if (loadData) {
+				try {
+					setError(false);
+					setCharging(true);
+					const rData = await getOrders();
+					setData(rData);
+				} catch (error) {
+					setError(true);
+				}
+				setCharging(false);
+				setLoadData(false);
 			}
-			setCharging(false);
 		};
 		exectAction();
-	}, []);
+	}, [loadData]);
 
 	return (
 		<>
@@ -34,7 +40,10 @@ const Index = () => {
 				) : error ? (
 					<HuboUnErrorAlObtenerLosDatos />
 				) : (
-					<OrderPagination data={data} />
+					<OrderPagination
+						data={data}
+						setLoadData={setLoadData}
+					/>
 				)}
 			</Row>
 		</>
