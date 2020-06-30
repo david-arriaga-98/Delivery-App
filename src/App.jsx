@@ -20,6 +20,7 @@ import OrderComponent from './components/Admin/Order';
 import DeliveryManComponent from './components/Admin/DeliveryMan';
 
 import { useSelector } from 'react-redux';
+import Routing from './pages/Routing';
 
 const ShippingComponent = lazy(() =>
 	import('./components/Shipping/Shipping')
@@ -54,22 +55,24 @@ function App({ history, context }) {
 						<Route exact path={'/'} component={Main} />
 
 						<SessionComponent
-							exact
 							path={'/home'}
 							component={HomeComponent}
 							interf={'U'}
 						/>
 
 						<SessionComponent
-							exact
 							path={'/perfil'}
 							component={ProfileComponent}
 							interf={'U'}
 						/>
 						<SessionComponent
-							exact
 							path={'/envios'}
 							component={ShippingComponent}
+							interf={'U'}
+						/>
+						<SessionComponent
+							path={'/ruteo'}
+							component={Routing}
 							interf={'U'}
 						/>
 						<SessionComponent

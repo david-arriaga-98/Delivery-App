@@ -14,16 +14,18 @@ export const HuboUnErrorAlObtenerLosDatos = () => {
 
 export const EstaCargandoLosDatos = () => {
 	return (
-		<Col md="9" className="mt-4 text-center">
-			<Spinner
-				className="ml-2"
-				as="span"
-				animation="border"
-				size="sm"
-				role="status"
-				aria-hidden="true"
-			/>
-		</Col>
+		<Row className="justify-content-center">
+			<Col md="9" className="mt-4 text-center">
+				<Spinner
+					className="ml-2"
+					as="span"
+					animation="border"
+					size="sm"
+					role="status"
+					aria-hidden="true"
+				/>
+			</Col>
+		</Row>
 	);
 };
 

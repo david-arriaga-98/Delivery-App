@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import OrderTable from './OrderTable';
 
-import PaginationComponent from '../../Common/Pagination';
+import PaginationComponent from '../../Common/Paginator';
 import Search from '../../Common/Search';
 import { NoHayDatos } from '../../Shipping/ShippingResponses';
 

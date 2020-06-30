@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 	}
 });
 
-const GetDeliveryManPaginator = ({
+const Paginator = ({
 	data,
 	context,
 	setPData,
@@ -132,4 +132,4 @@ const GetDeliveryManPaginator = ({
 	);
 };
 
-export default React.memo(GetDeliveryManPaginator);
+export default React.memo(Paginator);

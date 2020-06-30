@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import GetDeliveryManTable from './GetDeliveryManTable';
-import PaginatorComponent from '../../../Common/Pagination';
+import PaginatorComponent from '../../../Common/Paginator';
 
 import { NoHayDatos } from '../../../Shipping/ShippingResponses';
 
